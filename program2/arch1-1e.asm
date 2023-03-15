@@ -2,7 +2,7 @@
 ;                                                                             ;
 ; Plik           : arch1-1e.asm                                               ;
 ; Format         : EXE                                                        ;
-; Cwiczenie      : Kompilacja, konsolidacja i debugowanie programów           ;
+; Cwiczenie      : Kompilacja, konsolidacja i debugowanie programï¿½w           ;
 ;                  asemblerowych                                              ;
 ; Autorzy        : Imie Nazwisko, Imie Nazwisko, grupa, dzien, godzina zajec  ;
 ; Data zaliczenia: DD.MM.ROK                                                  ;
@@ -10,7 +10,7 @@
 ;                                                                             ;
 ;=============================================================================;
 
-                .MODEL  SMOLL
+                .MODEL  SMALL
 
 Dane            SEG
 
