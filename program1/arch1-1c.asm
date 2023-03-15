@@ -24,26 +24,20 @@ Kod             SEGMENT
 
 Start:          mov     al, a
                 mov     bl, b
-                sub     al,bl
+                sub     al,bl           ;ax = al - bl
+                mov     bl, c           ;bl = c
+                mul     bl
 
+                mov     bl,d
+                div     bl
                 
-                ; mul     al
-
-                ; mov bl,c
-                ; mov bh,d
-
-                ; div     
                 
-
-                ; div     d
-                ; sub     b, al
-
                 ; mov     bx, WORD PTR Wynik
 
 Koniec:         mov     ax, 4C00h
                 int     21h
 
-ENDSEGM	        Dane
 
-                ENDPROG Poczatek
+Kod             ENDS
 
+                END     start
