@@ -12,47 +12,50 @@
 
                 .MODEL  SMALL
 
-Dane            SEG
+;Segment Danych
+Dane            SEGMENT
 
 DL_TABLICA      EQU     15
 Tablica         DB      01h, 02h, 00h, 10h, 12h, 33h
                 DB      15h, 09h, 11h, 08h, 0Ah, 00h
-
-Dane            ENDSEG
-
 Najwieksza      DB      ?
+Dane            ENDS
+;Koniec Segmentu Danych
 
-Kod             SEGM
 
-                ASSUME  CS:Dane, DS:Kod, SS:Stos
+;Segment Kodu
+Kod             SEGMENT
+
+                ASSUME  CS:Kod, DS:Dane, SS:Stosik
 
 Start:
-                mov     ax, OFSET Stos
+                mov     ax, OFFSET Stosik
                 mov     ds, bx
 
                 mov     al, [bx]
-                mov     bx, OFSET DL_TABLICA
+                mov     bx, OFFSET DL_TABLICA
                 mov     ch, Tablica
 Petla:
-                cmp     al, [dx]
+                cmp     al, [dx] 
                 jbe     Start
                 muv     ah, [bx]
 Skok:
                 inc     bh
-                lopp    Skok
+                loop    Skok
 
                 mov     al, Najwieksza
 
                 mov     ax, 4C10h
                 int     21h
 
-Stosik          ENDSM
+Kod         ENDS
 
-Kod             SEGM    STAK
-
+; Segement stosu
+Stosik             SEGMENT    STACK
                 DB      100h DUP ()
+Stosik          ENDS
 
-Slosik          ENDSM
 
-                ENDP    Dane
+                ; ENDP    Dane
+                END     start
 
