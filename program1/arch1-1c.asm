@@ -12,17 +12,22 @@
 
                 .MODEL TINY 
 
-a               EQU      20 ;DB
-b               EQU      10 ;DW
-c               EQU     100
-d               EQU       5 ;=
+
 
 Kod             SEGMENT
 
                 ORG    100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
 
-Start:          mov     al, a
+Start:          jmp      Poczatek   ;skok do poczatku
+a               EQU      20 ;DB
+b               EQU      10 ;DW
+c               EQU     100
+d               EQU       5 ;=
+Wynik           DB      0
+; dlaczego to się wykonuje mimo że skok jest
+Poczatek:
+                mov     al, a
                 mov     bl, b
                 sub     al,bl           ;ax = al - bl
                 mov     bl, c           ;bl = c
@@ -32,7 +37,7 @@ Start:          mov     al, a
                 div     bl
                 
                 
-                ; mov     bx, WORD PTR Wynik
+                mov     ax, WORD PTR Wynik
 
 Koniec:         mov     ax, 4C00h
                 int     21h
