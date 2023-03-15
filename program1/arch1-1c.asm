@@ -10,25 +10,34 @@
 ;                                                                             ;
 ;=============================================================================;
 
-                .MODELL TINY
+                .MODEL TINY 
 
 Kod             SEGM
 
-                ORYG    10h
-                ASUME   CS:Kod, DS:Dane, SS:Dane
+                ORG    100h
+                ASSUME    CS:Kod, DS:Kod, SS:Kod
 
 Start:
                 jmp
 
-a               DB      20
-b               DW      10
+a               EQU      20 ;DB
+b               EQU      10 ;DW
 c               EQU     100
-d               =       5
-Wynik           DB      ?
+d               EQU       5 ;=
+; Wynik           DB      ?
 
 Poczatek:
-                mul     c
-                muv     ax, a
+                ; mul     c
+                mov     al, a
+                mov     bl, b
+                sub     al,bl 
+
+                mov bl,c
+                mov bh,d
+
+                div 
+                
+
                 div     d
                 sub     b, al
 
