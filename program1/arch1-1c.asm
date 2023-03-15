@@ -22,8 +22,8 @@ Kod             SEGMENT
 Start:          jmp      Poczatek   ;skok do poczatku
 a               EQU      20 ;DB
 b               EQU      10 ;DW
-c               EQU     100
-d               EQU       5 ;=
+c               EQU      100
+d               EQU      5 
 Wynik           DB      0
 ; dlaczego to się wykonuje mimo że skok jest
 Poczatek:
@@ -31,15 +31,15 @@ Poczatek:
                 mov     bl, b
                 sub     al,bl           ;ax = al - bl
                 mov     bl, c           ;bl = c
-                mul     bl
+                mul     bl              ;ax = al * bl
 
-                mov     bl,d
-                div     bl
+                mov     bl,d            ;bl = d
+                div     bl              ;ax = ax/bl
                 
                 
                 mov     ax, WORD PTR Wynik
 
-Koniec:         mov     ax, 4C00h
+Koniec:         mov     ax, 4C00h       ;zakonczenie
                 int     21h
 
 
