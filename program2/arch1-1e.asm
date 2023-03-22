@@ -45,7 +45,7 @@ Zmien:          mov     bh,[si]                 ;zmiana zapisanego najwiekszego
 
 Koniec: 
                 mov     Najwieksza,bh           ;zapis wyniku
-                mov     ax, 4C10h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+                mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
 
 Kod             ENDS                            ;koniec segmentu kodu
