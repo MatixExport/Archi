@@ -10,7 +10,7 @@
 ;                                                                             ;
 ;=============================================================================;
 
-                .MODEL  SMALL           ; dane i kod w osobnych segmentach o wielkości maksymalnie 64 kb każdy
+.MODEL  SMALL           ; dane i kod w osobnych segmentach o wielkości maksymalnie 64 kb każdy
 
 ;Segment Danych
 Dane            SEGMENT
@@ -19,10 +19,10 @@ Dane            SEGMENT
 
     Tablica         DB      08h, 02h, 00h, 10h, 12h, 50h    ;definicja tablicy
                     DB      15h, 09h, 11h, 08h, 0Ah, 08h    ;definicja tablicy
-    Najwieksza      DB      ?                              ;definicja zmiennej
+    Najwieksza      DB      ?                               ;definicja zmiennej
 Dane            ENDS        ;Koniec Segmentu Danych
 
-ASSUME  CS:Kod, DS:Dane, SS:Stosik
+ASSUME  CS:Kod, DS:Dane
 
 ;Segment Kodu
 Kod             SEGMENT
@@ -35,29 +35,18 @@ Start:          mov     ax, SEG Dane            ;ładowanie segmentu danych
 Looop:                
                 inc     si                      ;increment c
                 cmp     si,cx                   ;sprawdza czy warunek konca jest spelniony
-                jnb     Koniec                  ;skok do konca programu
+                jnb     Koniec                  ;jezeli si nie jest mniejsze niz cx to skok do konca programu
                 cmp     bh,[si]                 ;porownanie elementu iterowanego do zapisanego najwiekszego
-                jna     Zmien                   ;jezeli wieksyzy to zmieniamy
+                jna     Zmien                   ;jezeli bh nie jest wieksze niz kolejny element tablicy to zmien
                 jmp     Looop                   ;inaczej kontuujemy petle
 
 Zmien:          mov     bh,[si]                 ;zmiana zapisanego najwiekszego
                 jmp     Looop                   ;powrot do petli
 
-Skok:   
-
 Koniec: 
                 mov     Najwieksza,bh           ;zapis wyniku
-                mov     ax, 4C10h               ;?
-                int     21h                     ;? 
+                mov     ax, 4C10h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+                int     21h                     ;przerwanie systemowe konczace program
 
-Kod         ENDS                                ;koniec segmentu kodu
-
-; Segement stosu
-Stosik             SEGMENT    STACK             ;VVVpo co? nie wiemVVV
-                DB      100h DUP ()
-Stosik          ENDS
-
-
-                ; ENDP    Dane
-                END     start
-
+Kod             ENDS                            ;koniec segmentu kodu
+END             start
