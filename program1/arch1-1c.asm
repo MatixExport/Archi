@@ -12,8 +12,6 @@
 
                 .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
 
-
-
 Kod             SEGMENT
 
                 ORG    100h
@@ -24,7 +22,7 @@ a               EQU      20 ;DB
 b               EQU      10 ;DW
 c               EQU      100
 d               EQU      5 
-Wynik           DB      0
+Wynik           DB       0
 ; dlaczego to się wykonuje mimo że skok jest
 Poczatek:
                 mov     al, a
@@ -37,7 +35,9 @@ Poczatek:
                 div     bl              ;ax = ax/bl
                 
                 
+                mov     wynik,ax
                 mov     ax, WORD PTR Wynik
+                
 
 Koniec:         mov     ax, 4C00h       ;zakonczenie
                 int     21h
