@@ -24,7 +24,7 @@ a               EQU      20 ;DB
 b               EQU      10 ;DW
 c               EQU      100
 d               EQU      5 
-Wynik           DB      0
+Wynik           DB       0
 ; dlaczego to się wykonuje mimo że skok jest
 Poczatek:
                 mov     al, a
