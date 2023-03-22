@@ -10,24 +10,22 @@
 ;                                                                             ;
 ;=============================================================================;
 
-                .MODEL  SMALL
+                .MODEL  SMALL           ; dane i kod w osobnych segmentach o wielkości maksymalnie 64 kb każdy
 
 ;Segment Danych
 Dane            SEGMENT
 
-DL_TABLICA      EQU     12
+    DL_TABLICA      EQU     12                              ;definicja stalej
 
-Tablica         DB      08h, 02h, 00h, 10h, 12h, 50h
-                DB      15h, 09h, 11h, 08h, 0Ah, 08h
- Najwieksza      DB      ?
+    Tablica         DB      08h, 02h, 00h, 10h, 12h, 50h    ;definicja tablicy
+                    DB      15h, 09h, 11h, 08h, 0Ah, 08h    ;definicja tablicy
+    Najwieksza      DB      ?                              ;definicja zmiennej
 Dane            ENDS        ;Koniec Segmentu Danych
 
+ASSUME  CS:Kod, DS:Dane, SS:Stosik
 
 ;Segment Kodu
 Kod             SEGMENT
-
-                ASSUME  CS:Kod, DS:Dane, SS:Stosik
-
 Start:          mov     ax, SEG Dane            ;ładowanie segmentu danych
                 mov     ds, ax                  ;ustawienie wskaznika ds na segment danych
                 mov     si,OFFSET TABLICA       ;si zaczyna sie tam gdie tablica

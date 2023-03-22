@@ -10,7 +10,7 @@
 ;                                                                             ;
 ;=============================================================================;
 
-                .MODEL TINY 
+                .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
 
 
 
