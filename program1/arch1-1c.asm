@@ -9,22 +9,21 @@
 ; Uwagi          : Program obliczajacy wzor: (a-b)*c/d                        ;
 ;                                                                             ;
 ;=============================================================================;
-
+a               EQU      20 ;DB
+b               EQU      10 ;DW
+c               EQU      100
+d               EQU      5 
                 .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
 
 
 
 Kod             SEGMENT
 
-                ORG    100h
+                ORG       100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
 
-Start:          jmp      Poczatek   ;skok do poczatku
-a               EQU      20 ;DB
-b               EQU      10 ;DW
-c               EQU      100
-d               EQU      5 
-Wynik           DB       0
+Start:          jmp      Poczatek   ;skok do poczatku                                                           ?
+Wynik           DB         0
 ; dlaczego to się wykonuje mimo że skok jest
 Poczatek:
                 mov     al, a
@@ -37,10 +36,11 @@ Poczatek:
                 div     bl              ;ax = ax/bl
                 
                 
-                mov     ax, WORD PTR Wynik
+                mov     Wynik,ax
 
 Koniec:         mov     ax, 4C00h       ;zakonczenie
                 int     21h
+
 
 
 Kod             ENDS

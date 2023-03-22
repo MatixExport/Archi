@@ -22,7 +22,7 @@ Dane            SEGMENT
     Najwieksza      DB      ?                               ;definicja zmiennej
 Dane            ENDS        ;Koniec Segmentu Danych
 
-ASSUME  CS:Kod, DS:Dane
+ASSUME  CS:Kod, DS:Dane ;,SS:Stosik
 
 ;Segment Kodu
 Kod             SEGMENT
@@ -45,8 +45,13 @@ Zmien:          mov     bh,[si]                 ;zmiana zapisanego najwiekszego
 
 Koniec: 
                 mov     Najwieksza,bh           ;zapis wyniku
-                mov     ax, 4C10h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+                mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
+
+;Stosik             SEGMENT    STACK            
+;                DB      100h DUP ()
+;Stosik          ENDS
+
 
 Kod             ENDS                            ;koniec segmentu kodu
 END             start
