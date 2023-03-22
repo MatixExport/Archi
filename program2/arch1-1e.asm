@@ -2,9 +2,9 @@
 ;                                                                             ;
 ; Plik           : arch1-1e.asm                                               ;
 ; Format         : EXE                                                        ;
-; Cwiczenie      : Kompilacja, konsolidacja i debugowanie program�w           ;
+; Cwiczenie      : Kompilacja, konsolidacja i debugowanie program�w          ;
 ;                  asemblerowych                                              ;
-; Autorzy        : Imie Nazwisko, Imie Nazwisko, grupa, dzien, godzina zajec  ;
+; Autorzy        : Mateusz Giełczyński, Jakub Kubiś, 1.1, śr, 12:00           ;
 ; Data zaliczenia: DD.MM.ROK                                                  ;
 ; Uwagi          : Program znajdujacy najwieksza liczbe w tablicy             ;
 ;                                                                             ;
@@ -14,11 +14,9 @@
 
 ;Segment Danych
 Dane            SEGMENT
-
     DL_TABLICA      EQU     12                              ;definicja stalej
-
-    Tablica         DB      08h, 02h, 00h, 10h, 12h, 50h    ;definicja tablicy
-                    DB      15h, 09h, 11h, 08h, 0Ah, 08h    ;definicja tablicy
+    Tablica         DB      01h, 02h, 00h, 10h, 12h, 33h
+                    DB      15h, 09h, 11h, 08h, 0Ah, 00h
     Najwieksza      DB      ?                               ;definicja zmiennej
 Dane            ENDS        ;Koniec Segmentu Danych
 

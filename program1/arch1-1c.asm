@@ -2,9 +2,9 @@
 ;                                                                             ;
 ; Plik           : arch1-1c.asm                                               ;
 ; Format         : COM                                                        ;
-; Cwiczenie      : Kompilacja, konsolidacja i debugowanie program�w           ;
+; Cwiczenie      : Kompilacja, konsolidacja i debugowanie program�w          ;
 ;                  asemblerowych                                              ;
-; Autorzy        : Imie Nazwisko, Imie Nazwisko, grupa, dzien, godzina zajec  ;
+; Autorzy        : Mateusz Giełczyński, Jakub Kubiś, 1.1, śr, 12:00           ;
 ; Data zaliczenia: DD.MM.ROK                                                  ;
 ; Uwagi          : Program obliczajacy wzor: (a-b)*c/d                        ;
 ;                                                                             ;
@@ -18,16 +18,14 @@ d               EQU      5
 
 
 Kod             SEGMENT
-
                 ORG       100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
+Start:
 
-Start:          jmp      Poczatek   ;skok do poczatku                                                           ?
-Wynik           DB         0
 ; dlaczego to się wykonuje mimo że skok jest
 Poczatek:
-                mov     al, a
-                mov     bl, b
+                mov     al, a           ;al = a
+                mov     bl, b           ;bl = b
                 sub     al,bl           ;ax = al - bl
                 mov     bl, c           ;bl = c
                 mul     bl              ;ax = al * bl
@@ -36,11 +34,12 @@ Poczatek:
                 div     bl              ;ax = ax/bl
                 
                 
-                mov     Wynik,ax
+                mov     wynik,ax        ;wynik=ax
 
-Koniec:         mov     ax, 4C00h       ;zakonczenie
-                int     21h
+Koniec:         mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+                int     21h                     ;przerwanie systemowe konczace program
 
+wynik           DW      0h
 
 
 Kod             ENDS
