@@ -8,10 +8,14 @@
 				.MODEL  SMALL
 
 Dane			SEGMENT USE16
-l1 				DB           "12345"
-l2 				DB           "345"
+l1 				DB           "0000000000001010" 
+l2 				DB           "1111111111110101"
+;10  + -11^^^
 
 ;DD jako 4 bajty
+
+;poprzez zanegowanie wszystkich bitów modułu liczby i do otrzymanego wyniku dodanie 1.
+;tak robimy
 
 Dane			ENDS
 
@@ -19,21 +23,47 @@ Kod				SEGMENT USE16
 				ASSUME  CS:Kod, DS:Dane, SS:Stosik
 
 Start:			mov     ax, SEG Dane
-                mov     ds, ax 
+                mov     ds, ax 					;czytanie segmentu danych
 				
-                mov     ah, 09h         
-                mov     dx, OFFSET Napis
+                ;if ujemna:
+					;odejmij 1
+					;negacja bitowa    ;jest w 2 tylko jeszcze na -
+				;if dodatnia:
+					;jest w 2
+				
+				mov si,0
+				mov ax,0
+				mov bh,30h
+looop:
+				
+				cmp si,15
+				jnb skok
+				cmp [si],bh
+				je zero
+				jmp jeden
+zero:
+	shl ax,1
+	inc si
+	jmp looop
+jeden:
+	inc ax
+	shl ax,1
+	inc si
+	jmp looop
+skok:
+				mov     ah, 4Ch
+				
                 int     21h
+				;mov		eax, 165536
+				;mov		ebx, 2
+				;add 		eax, ebx
 				
-				mov		eax, 165536
-				mov		ebx, 2
-				add 	eax, ebx
+
+				mov     ah, 09h         			;poczatek wypisywania
+                mov     dx, OFFSET l1
+                int     21h							;koniec wypisywania
+
 				
-
-
-
-				mov     ax, 4C00h
-                int     21h
 
 Kod				ENDS
 
