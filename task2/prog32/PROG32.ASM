@@ -5,7 +5,7 @@
 
 
 				.386p
-				.MODEL  SMALL
+				.MODEL  SMALL			;zmienic na exe
 
 Dane			SEGMENT USE16
 l1 				DB           "0000000000001010" 
