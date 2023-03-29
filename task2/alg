@@ -1,0 +1,73 @@
+//--------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <stack>
+using namespace std;
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+int str2num(string str)
+{
+ int num = 0;
+ for (int i = 0; i < str.length(); i++)
+ {
+  num = num * 10;
+  num = num + str[i] - '0';
+ }
+ return num;
+}
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+string num2str(int num)
+{
+
+ int         reminder;
+ string      str; 
+ stack<char> stc;
+
+ while (num > 0)
+ {
+  reminder = num % 10;
+  num      = num / 10;
+  stc.push(reminder + '0');
+ }
+ 
+ while (!stc.empty())
+ {
+  str.push_back(stc.top());
+  stc.pop();
+ }
+ 
+ return str;
+
+}
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+ 
+ string str1 = "2145"; int num1;
+ string str2         ; int num2 = 3458;
+ 
+ num1 = str2num(str1);
+ cout << "str1 = " << str1 << endl;
+ cout << "num1 = " << num1 << endl << endl;
+ 
+ str2 = num2str(num2);
+ cout << "str2 = " << str2 << endl;
+ cout << "num2 = " << num2 << endl << endl;
+ 
+ return 0;
+
+}
