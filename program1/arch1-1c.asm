@@ -14,7 +14,7 @@ b               EQU      10 ;DW
 c               EQU      100
 d               EQU      5 
                 .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
-
+ 
 
 
 Kod             SEGMENT
