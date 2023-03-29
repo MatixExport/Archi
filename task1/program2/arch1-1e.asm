@@ -31,7 +31,7 @@ Start:          mov     ax, SEG Dane            ;ładowanie segmentu danych
                 mov     cx,DL_TABLICA           ;zapisanie dlugosci tablicy
                 mov     bh,[si]                 ;przypisanie pierwszego elementu jako najwiekszy
 Looop:                
-                inc     si                      ;increment c
+                inc     si                      ;increment si
                 cmp     si,cx                   ;sprawdza czy warunek konca jest spelniony
                 jnb     Koniec                  ;jezeli si nie jest mniejsze niz cx to skok do konca programu
                 cmp     bh,[si]                 ;porownanie elementu iterowanego do zapisanego najwiekszego

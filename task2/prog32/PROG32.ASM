@@ -1,8 +1,18 @@
+;Napisać program, który konwertować będzie dwie liczby całkowite 
+;z przedziału [-32768..32767] z postaci ASCII do postaci 
+;obliczeniowej w kodzie U2, dodawać je do siebie, a otrzymany 
+;wynik wyświetlać na ekranie.
+
+
 				.386p
 				.MODEL  SMALL
 
 Dane			SEGMENT USE16
-Napis           DB      "Witaj swiecie!",13,10,"$"
+l1 				DB           "12345"
+l2 				DB           "345"
+
+;DD jako 4 bajty
+
 Dane			ENDS
 
 Kod				SEGMENT USE16
@@ -15,10 +25,13 @@ Start:			mov     ax, SEG Dane
                 mov     dx, OFFSET Napis
                 int     21h
 				
-				mov		eax, 1
+				mov		eax, 165536
 				mov		ebx, 2
 				add 	eax, ebx
 				
+
+
+
 				mov     ax, 4C00h
                 int     21h
 
