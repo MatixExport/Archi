@@ -9,7 +9,7 @@
 ; Uwagi          : Program obliczajacy wzor: (a-b)*c/d                        ;
 ;                                                                             ;
 ;=============================================================================;
-a               EQU      20 ;DB
+
 b               EQU      10 ;DW
 c               EQU      100
 d               EQU      5 
