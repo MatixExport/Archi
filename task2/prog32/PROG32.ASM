@@ -39,7 +39,7 @@ looop:
 				cmp si,15
 				jnb skok
 				cmp [si],bh
-				je zero
+				je zero			;jump equal
 				jmp jeden
 zero:
 	shl ax,1
@@ -47,11 +47,11 @@ zero:
 	jmp looop
 jeden:
 	inc ax
-	shl ax,1
+	shl ax,1		;shift left
 	inc si
 	jmp looop
 skok:
-				mov     ah, 4Ch
+				mov     ah, 4Ch				;al wynikiem tłumaczenia l1 ze stringa (binarny naturalny) na inta 
 				
                 int     21h
 				;mov		eax, 165536
