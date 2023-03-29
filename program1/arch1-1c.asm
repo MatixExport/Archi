@@ -15,6 +15,8 @@ c               EQU      100
 d               EQU      5 
                 .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
 
+
+
 Kod             SEGMENT
                 ORG       100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
@@ -32,10 +34,12 @@ Poczatek:
                 div     bl              ;ax = ax/bl
                 
                 
-                mov     ax, WORD PTR Wynik
+                mov     wynik,ax        ;wynik=ax
 
-Koniec:         mov     ax, 4C00h       ;zakonczenie
-                int     21h
+Koniec:         mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+                int     21h                     ;przerwanie systemowe konczace program
+
+wynik           DW      0h
 
 
 Kod             ENDS
