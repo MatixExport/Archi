@@ -8,8 +8,12 @@
 				.MODEL  SMALL			;zmienic na exe
 
 Dane			SEGMENT USE16
-l1 				DB           "0000000000001010" 
-l2 				DB           "1111111111110101"
+l1 				DB           "0000000000001010b" 
+l2 				DB           "1111111111110101b"
+
+li1             DB    ?
+li2             DB    ?
+
 ;10  + -11^^^
 
 ;DD jako 4 bajty
@@ -76,9 +80,15 @@ ujemna:
 	;jmp looop
 skok1:
 	inc ax
+	mov li2,al
 	jmp skok
 
 skok:
+	mov li1,al
+
+	mov bl,li1
+	mov al,li2
+	sub al,bl
 
 	mov     ah, 4Ch				;al wynikiem tłumaczenia l1 ze stringa (binarny naturalny) na inta 
     int     21h

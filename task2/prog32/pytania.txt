@@ -1,5 +1,1 @@
-czy da się porównywać i robić coś bez jmp/jnb/je itp
-czy aby na pewno taki zapis "0000000000001010" w drugim zadaniu
-
-
-
+wejście/wyjście w 2?            //na sztywno, można rejestry 32 bit

@@ -10,36 +10,42 @@
 ;                                                                             ;
 ;=============================================================================;
 
-b               EQU      10 ;DW
-c               EQU      100
-d               EQU      5 
+
+
                 .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
  
-
-
 Kod             SEGMENT
                 ORG       100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
 Start:
 
-; dlaczego to się wykonuje mimo że skok jest
-Poczatek:
-                mov     al, a           ;al = a
-                mov     bl, b           ;bl = b
-                sub     al,bl           ;ax = al - bl
-                mov     bl, c           ;bl = c
-                mul     bl              ;ax = al * bl
 
-                mov     bl,d            ;bl = d
-                div     bl              ;ax = ax/bl
-                
-                
-                mov     wynik,ax        ;wynik=ax
+                jmp st
+wynik           DW      0h
 
-Koniec:         mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+a               DB       "17" 
+b               DB      "-11"
+an              DB      0
+
+
+st:
+
+        mov     si,OFFSET a         
+looop:  cmp     si,OFFSET b
+        je      Koniec
+        mov     bx,10
+        mul     bx
+        mov     bx,[si]
+        sub     bx , 48
+        add     al,bl
+        inc     si
+        jmp     looop
+
+Koniec:        
+                mov     wynik, ax        ; w wyniku 11h = 17d czyli działa tlumaczenie stringa a na inta  
+                mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
 
-wynik           DW      0h
 
 
 Kod             ENDS
