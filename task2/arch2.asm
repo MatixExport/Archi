@@ -30,7 +30,7 @@ startt:
         ;jakieś rzeczy się dzieją niestworzone
 
         mov     si,OFFSET a   
-        cmp     [si] , '-'      
+        cmp     byte ptr [si] , '-'      
         je      minus1
 
 looop:  cmp     si,OFFSET b
@@ -125,6 +125,10 @@ convertToAsciiLoop:
 
         ;add eax,48d; w eax mamy kod asci danej cyfry
         add eax,'0'
+mov dx,ax
+mov ah,02h
+int 21h
+
         ;zapisać cyfrę 
         mov [si],ax ; chyba ax wystarczy bo to pojedyńcza cyfra a nie jakies tam araraty
         inc si
@@ -135,14 +139,14 @@ print:
                 ;trzeba to wypisać odwrotnie
                 mov     ah, 09h
                 mov     dx, OFFSET napis
-                int     21h
+ ;wylączone bo wcześniej wypisane (128-130)               int     21h
 Koniec:        
                 mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB       "17" 
-b               DB      "-20"
+a               DB       "-500" 
+b               DB      "10"
 an              DW      0
 znak            DB      0
 napis db 16 dup (0)
