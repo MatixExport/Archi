@@ -87,16 +87,28 @@ dodaj:
         add eax,ebx
         xor eax,10000000000000000b
         mov wynik,eax ; TODO: przetestować dla dużych liczb
-        ;no tak średnio działa bo jeżeli dobrze rozumiem to 17 bit określa znak
-        ;to wychodzi że 17 - 11 = -6
         ;dobra z jakiegoś powodu wychodzi dobrze tylko że
         ;trzeba dać not na 17 bit i wtedy wszystko śmiga lata super jest
-
+convertoToAsciiDecision:
+        xor ebx, ebx  ; czyścimy ebx
+        mov  si,OFFSET napis 
+        cmp eax,10000000000000000b
+        jb convertToAsciiPrestart
+convertToAsciiIfNegative:
+        ;mov ax,1111h
+        mov [si],'-' ; to jest bezsensu bo będziemy obracać cyfry więc to tylko przeszkadza
+        inc si       ; lepiej zrobić flagę i wypisać to na końcu przed obrotem  ale na razie niech se bedzie
+        ;rozkład eax
+        xor ebx,ebx
+        mov ebx,eax
+        xor ebx,10000000000000000b ; wartość eax bez 17 bitu
+        xor eax,eax
+        mov eax, 10000h ; wartośc 17 bitu do której będziemy dodawać wartości kolejnych bitów
+        sub eax,ebx
 convertToAsciiPrestart:
         ;dla dodatnich działa trzeba jeszcze zrobić rozkład dla ujemnych
-        xor ebx, ebx  ; czyścimy ebx
+        xor ebx,ebx
         xor ecx,ecx
-        mov  si,OFFSET napis 
         mov ecx, 10 ; tu jest 10 bo będziem dzielić przez 10 (naprawdę)
 convertToAscii:
         ;mov eax,0h
@@ -104,7 +116,6 @@ convertToAscii:
         JNE convertToAsciiLoop
         JMP print
 convertToAsciiLoop:
-        ; eax % ebx
         xor edx, edx  ; czyścimy edx
         div ecx
         xor ebx, ebx
@@ -131,7 +142,7 @@ Koniec:
 
 wynik           DD     0h
 a               DB       "17" 
-b               DB      "-11"
+b               DB      "-20"
 an              DW      0
 znak            DB      0
 napis db 16 dup (0)
