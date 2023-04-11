@@ -11,17 +11,17 @@
 ;=============================================================================;
 
 
-
+                .386p
                 .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
  
-Kod             SEGMENT
+Kod             SEGMENT USE16
                 ORG       100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
 Start:
 
 
                 jmp startt
-wynik           DW      0h
+wynik           DD     0h
 
 a               DB       "17" 
 b               DB      "-11"
@@ -81,12 +81,12 @@ minus2:
         mov     znak,1
         inc     si
         jmp     looop2
-
 ;koniec zamiany liczb
 
 dodaj:
-        ;kod na dodawanie trzeba by dodać
-        ;an + ax
+        mov bx, an
+        add eax,ebx
+        mov wynik,eax
 
 Koniec:        
                 mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
