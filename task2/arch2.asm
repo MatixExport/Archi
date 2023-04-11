@@ -20,16 +20,15 @@ Kod             SEGMENT USE16
 Start:
 
 
-                jmp startt
-wynik           DD     0h
-
-a               DB       "17" 
-b               DB      "-11"
-an              DW      0
-znak            DB      0
-
-
 startt:
+        ;xor eax,eax
+        ;xor ebx,ebx
+        ;mov ebx,10
+        ;mov eax,6
+        ;div ebx
+        ;tutaj to działa dzieli przez 10 a tam w konwersji na asci
+        ;jakieś rzeczy się dzieją niestworzone
+
         mov     si,OFFSET a   
         cmp     [si] , '-'      
         je      minus1
@@ -86,13 +85,56 @@ minus2:
 dodaj:
         mov bx, an
         add eax,ebx
-        mov wynik,eax
+        xor eax,10000000000000000b
+        mov wynik,eax ; TODO: przetestować dla dużych liczb
+        ;no tak średnio działa bo jeżeli dobrze rozumiem to 17 bit określa znak
+        ;to wychodzi że 17 - 11 = -6
+        ;dobra z jakiegoś powodu wychodzi dobrze tylko że
+        ;trzeba dać not na 17 bit i wtedy wszystko śmiga lata super jest
 
+convertToAsciiPrestart:
+        ;dla dodatnich działa trzeba jeszcze zrobić rozkład dla ujemnych
+        xor ebx, ebx  ; czyścimy ebx
+        xor ecx,ecx
+        mov  si,OFFSET napis 
+        mov ecx, 10 ; tu jest 10 bo będziem dzielić przez 10 (naprawdę)
+convertToAscii:
+        ;mov eax,0h
+        cmp eax,0d
+        JNE convertToAsciiLoop
+        JMP print
+convertToAsciiLoop:
+        ; eax % ebx
+        xor edx, edx  ; czyścimy edx
+        div ecx
+        xor ebx, ebx
+        mov ebx,eax ; czyścimy ebx i zapisujemy tam eax
+        xor eax, eax
+        mov eax,edx ; przenosimy resztę z dzielnie do eax żeby dodać 48
+
+        ;add eax,48d; w eax mamy kod asci danej cyfry
+        add eax,'0'
+        ;zapisać cyfrę 
+        mov [si],ax ; chyba ax wystarczy bo to pojedyńcza cyfra a nie jakies tam araraty
+        inc si
+        xor eax, eax
+        mov eax,ebx ; przywracamy konwertowaną liczbę do eax
+        JMP convertToAscii
+print:
+                ;trzeba to wypisać odwrotnie
+                mov     ah, 09h
+                mov     dx, OFFSET napis
+                int     21h
 Koniec:        
                 mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
 
-
+wynik           DD     0h
+a               DB       "17" 
+b               DB      "-11"
+an              DW      0
+znak            DB      0
+napis db 16 dup (0)
 
 Kod             ENDS
 
