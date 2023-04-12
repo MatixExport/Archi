@@ -147,8 +147,8 @@ Koniec:
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB       "-32768" 
-b               DB      "32767"
+a               DB      "4000" 
+b               DB      "8000"
 an              DW      0
 znak            DB      0
 napis db 16 dup (0)
