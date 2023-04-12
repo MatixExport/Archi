@@ -84,20 +84,20 @@ minus2:
 
 hexTo32BitConvert:
         or eax,11111111111111110000000000000000b
-        ret
+        jmp xd
 hexTo32BitConvert2:
         or ebx,11111111111111110000000000000000b
-        ret
+        jmp xd2
 
 dodaj:
 
-        cmp eax,10000000000000000b
-        call  hexTo32BitConvert
-
+        cmp eax,1000000000000000b
+        jnb  hexTo32BitConvert
+xd:
         mov bx, an
-        cmp ebx,10000000000000000b
-        call  hexTo32BitConvert2
-
+        cmp ebx,1000000000000000b
+        jnb  hexTo32BitConvert2
+xd2:
         
 ;       xor eax,10000000000000000b
 
@@ -108,9 +108,14 @@ convertoToAsciiDecision:
         cmp eax,100000000000000000b
         jb convertToAsciiPrestart
 convertToAsciiIfNegative:
+        xor ebx,ebx
+        mov ebx,eax
 
-        ;mov ax,1111h
-        mov [si],'-' ; to jest bezsensu bo będziemy obracać cyfry więc to tylko przeszkadza
+        mov dx , '-'
+        mov ah,02h
+        int 21h
+        mov eax,ebx
+
         inc si       ; lepiej zrobić flagę i wypisać to na końcu przed obrotem  ale na razie niech se bedzie
         ;rozkład eax
         xor ebx,ebx
@@ -158,8 +163,8 @@ Koniec:
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB      "-4000" 
-b               DB      "8000"
+a               DB      "8000" 
+b               DB      "-8000"
 an              DW      0
 znak            DB      0
 napisStart      DB     0
