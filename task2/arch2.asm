@@ -83,11 +83,13 @@ minus2:
 ;koniec zamiany liczb
 
 dodaj:
-
+if (eax[16]==1){
+and eax,11111111111111110000000000000000
+}
         mov bx, an
-        
+;        xor eax,10000000000000000b
+
         add eax,ebx
-        xor eax,10000000000000000b
         mov wynik,eax ; TODO: przetestować dla dużych liczb
         ;dobra z jakiegoś powodu wychodzi dobrze tylko że
         ;trzeba dać not na 17 bit i wtedy wszystko śmiga lata super jest
@@ -97,6 +99,7 @@ convertoToAsciiDecision:
         cmp eax,10000000000000000b
         jb convertToAsciiPrestart
 convertToAsciiIfNegative:
+
         ;mov ax,1111h
         mov [si],'-' ; to jest bezsensu bo będziemy obracać cyfry więc to tylko przeszkadza
         inc si       ; lepiej zrobić flagę i wypisać to na końcu przed obrotem  ale na razie niech se bedzie
@@ -127,9 +130,6 @@ convertToAsciiLoop:
 
         ;add eax,48d; w eax mamy kod asci danej cyfry
         add eax,'0'
-mov dx,ax
-mov ah,02h
-int 21h
 
         ;zapisać cyfrę 
         mov [si],ax ; chyba ax wystarczy bo to pojedyńcza cyfra a nie jakies tam araraty
@@ -141,14 +141,14 @@ print:
                 ;trzeba to wypisać odwrotnie
                 mov     ah, 09h
                 mov     dx, OFFSET napis
- ;wylączone bo wcześniej wypisane (128-130)               int     21h
+                int     21h
 Koniec:        
                 mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
 a               DB      "4000" 
-b               DB      "8000"
+b               DB      "-8000"
 an              DW      0
 znak            DB      0
 napis db 16 dup (0)
