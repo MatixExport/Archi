@@ -81,16 +81,13 @@ minus2:
         inc     si
         jmp     looop2
 ;koniec zamiany liczb
-
 hexTo32BitConvert:
         or eax,11111111111111110000000000000000b
         jmp xd
 hexTo32BitConvert2:
         or ebx,11111111111111110000000000000000b
         jmp xd2
-
 dodaj:
-
         cmp eax,1000000000000000b
         jnb  hexTo32BitConvert
 xd:
@@ -98,9 +95,6 @@ xd:
         cmp ebx,1000000000000000b
         jnb  hexTo32BitConvert2
 xd2:
-        
-;       xor eax,10000000000000000b
-
         add eax,ebx
 convertoToAsciiDecision:
         xor ebx, ebx  ; czyścimy ebx
@@ -111,12 +105,11 @@ convertToAsciiIfNegative:
         xor ebx,ebx
         mov ebx,eax
 
-        mov dx , '-'
+        mov dx , '-' ; wypisanie '-' dla liczb ujemnych
         mov ah,02h
         int 21h
         mov eax,ebx
-
-        inc si       ; lepiej zrobić flagę i wypisać to na końcu przed obrotem  ale na razie niech se bedzie
+        inc si      
         ;rozkład eax
         xor ebx,ebx
         mov ebx,eax
@@ -129,11 +122,6 @@ convertToAsciiPrestart:
         xor ebx,ebx
         xor ecx,ecx
         mov ecx, 10 ; tu jest 10 bo będziem dzielić przez 10 (naprawdę)
-convertToAscii:
-        ;mov eax,0h
-        cmp eax,0d
-        JNE convertToAsciiLoop
-        JMP print
 convertToAsciiLoop:
         xor edx, edx  ; czyścimy edx
         div ecx
@@ -141,18 +129,18 @@ convertToAsciiLoop:
         mov ebx,eax ; czyścimy ebx i zapisujemy tam eax
         xor eax, eax
         mov eax,edx ; przenosimy resztę z dzielnie do eax żeby dodać 48
-
         ;add eax,48d; w eax mamy kod asci danej cyfry
         add eax,'0'
-
         ;zapisać cyfrę 
         mov [si],ax ; chyba ax wystarczy bo to pojedyńcza cyfra a nie jakies tam araraty
         inc si
         xor eax, eax
         mov eax,ebx ; przywracamy konwertowaną liczbę do eax
-        JMP convertToAscii
+
+        cmp eax,0d
+        JNE convertToAsciiLoop
 print:
-                mov  ah, 02h
+                mov  ah, 02h ;wypisanie stringa napis od końca
                 mov dx,[si]
                 int     21h
                 dec si
@@ -163,7 +151,7 @@ Koniec:
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB      "8000" 
+a               DB      "30000" 
 b               DB      "-8000"
 an              DW      0
 znak            DB      0
