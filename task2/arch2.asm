@@ -121,10 +121,10 @@ Koniec:
         int     21h                             ;przerwanie systemowe konczace program
 
 
-a               DB      "-8000"                  ;input 1
-b               DB      "4000"                  ;input 2
+a               DB      "32767"                  ;input 1
+b               DB      "32767"                  ;input 2
 an              DW      0                        ;zmienna 
-znak            DB      0
+znak            DB      0                        ;flaga czy liczba jest ujemna
 
 napis           db      16 dup (0)
 
