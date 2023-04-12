@@ -82,21 +82,30 @@ minus2:
         jmp     looop2
 ;koniec zamiany liczb
 
+hexTo32BitConvert:
+        or eax,11111111111111110000000000000000b
+        ret
+hexTo32BitConvert2:
+        or ebx,11111111111111110000000000000000b
+        ret
+
 dodaj:
-if (eax[16]==1){
-and eax,11111111111111110000000000000000
-}
+
+        cmp eax,10000000000000000b
+        call  hexTo32BitConvert
+
         mov bx, an
-;        xor eax,10000000000000000b
+        cmp ebx,10000000000000000b
+        call  hexTo32BitConvert2
+
+        
+;       xor eax,10000000000000000b
 
         add eax,ebx
-        mov wynik,eax ; TODO: przetestować dla dużych liczb
-        ;dobra z jakiegoś powodu wychodzi dobrze tylko że
-        ;trzeba dać not na 17 bit i wtedy wszystko śmiga lata super jest
 convertoToAsciiDecision:
         xor ebx, ebx  ; czyścimy ebx
         mov  si,OFFSET napis 
-        cmp eax,10000000000000000b
+        cmp eax,100000000000000000b
         jb convertToAsciiPrestart
 convertToAsciiIfNegative:
 
@@ -106,7 +115,7 @@ convertToAsciiIfNegative:
         ;rozkład eax
         xor ebx,ebx
         mov ebx,eax
-        xor ebx,10000000000000000b ; wartość eax bez 17 bitu
+        and ebx,00000000000000001111111111111111b ; wartość eax bez 17 bitu
         xor eax,eax
         mov eax, 10000h ; wartośc 17 bitu do której będziemy dodawać wartości kolejnych bitów
         sub eax,ebx
@@ -147,8 +156,8 @@ Koniec:
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB      "4000" 
-b               DB      "-8000"
+a               DB      "-4000" 
+b               DB      "8000"
 an              DW      0
 znak            DB      0
 napis db 16 dup (0)
