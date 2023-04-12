@@ -83,9 +83,9 @@ minus2:
 ;koniec zamiany liczb
 
 dodaj:
-if (eax[16]==1){
-and eax,11111111111111110000000000000000
-}
+; if (eax[16]==1){
+; and eax,11111111111111110000000000000000
+; }
         mov bx, an
 ;        xor eax,10000000000000000b
 
@@ -138,19 +138,22 @@ convertToAsciiLoop:
         mov eax,ebx ; przywracamy konwertowaną liczbę do eax
         JMP convertToAscii
 print:
-                ;trzeba to wypisać odwrotnie
-                mov     ah, 09h
-                mov     dx, OFFSET napis
+                mov  ah, 02h
+                mov dx,[si]
                 int     21h
+                dec si
+                cmp si,OFFSET napis
+                jnb print
 Koniec:        
                 mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB      "4000" 
-b               DB      "-8000"
+a               DB      "100" 
+b               DB      "100"
 an              DW      0
 znak            DB      0
+napisStart      DB     0
 napis db 16 dup (0)
 
 Kod             ENDS
