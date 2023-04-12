@@ -1,21 +1,22 @@
 ;=============================================================================;
 ;                                                                             ;
-; Plik           : arch1-1c.asm                                               ;
+; Plik           : arch2.asm                                               ;
 ; Format         : COM                                                        ;
 ; Cwiczenie      : Kompilacja, konsolidacja i debugowanie program�w          ;
 ;                  asemblerowych                                              ;
 ; Autorzy        : Mateusz Giełczyński, Jakub Kubiś, 1.1, śr, 12:00           ;
 ; Data zaliczenia: DD.MM.ROK                                                  ;
-; Uwagi          : Program obliczajacy wzor: (a-b)*c/d                        ;
+; Uwagi          : Program zmieniajacy liczyby z lancucha znakow na liczby    ;
+;               w zapisie u2 i wypisujacy wynik oddawania tych liczb na ekran ;
 ;                                                                             ;
 ;=============================================================================;
 
                 .386p
-                .MODEL TINY         ; dane i kod sa w jednym segmencie o max wielkosci 64kb
+                .MODEL TINY                     ; dane i kod sa w jednym segmencie o max wielkosci 64kb
  
 Kod             SEGMENT USE16
-                ORG       100h
-                ASSUME    CS:Kod, DS:Kod, SS:Kod
+        ORG       100h
+        ASSUME    CS:Kod, DS:Kod, SS:Kod
 Start:
         mov     si,OFFSET a                     ;zaczynamy na pierwszej liczbie z a
         cmp     byte ptr [si] , '-'             ;sprawdzamy czy ujemna
@@ -45,22 +46,22 @@ ujemna:
         jmp     nexxt                           ;liczba juz zmieniona do kodu u2
 
 nexxt:
-        cmp     an,0          ;sprawdzamy czy obie liczby sa zmienione
-        jne     dodaj
-        mov     an, ax        ; wynik pierwszej liczby do an  
-        mov     ax, 0         ;poczatek konwersji drugiej liczby
+        cmp     an,0                            ;sprawdzamy czy obie liczby sa zmienione
+        jne     dodaj                   ;przejscie do czesci dodajacej
+        mov     an, ax                          ; wynik pierwszej liczby do an  
+        mov     ax, 0                           ;poczatek konwersji drugiej liczby
         mov     znak,0
 
         mov     si,OFFSET b   
-        cmp     byte ptr [si] , '-'     ;byte ptr zeby porównać 8 bitów nie 16 
+        cmp     byte ptr [si] , '-'             ;byte ptr zeby porównać 8 bitów nie 16 
         je      minus2
 looop2:
         cmp     si,OFFSET an
         je      next
         mul     cx                              ;*10
-        mov     bl,[si]
-        sub     bl , 48
-        add     ax,bx
+        mov     bl,[si]                         ;wczytanie kolejnej cyfry
+        sub     bl , 48                         ;zmiana z asci na int
+        add     ax,bx                           
         inc     si
         jmp     looop2
 minus2:
@@ -68,83 +69,65 @@ minus2:
         inc     si
         jmp     looop2
 ;koniec zamiany liczb
-hexTo32BitConvert:
-        or eax,11111111111111110000000000000000b
-        jmp xd
+
+hexTo32BitConvert:                 ;konwersja 16 bitowej ujemnej na 32 bitowa, poprzez wpisanie jedynek do wszyskich bitow przed 16
+        or      eax,11111111111111110000000000000000b
+        jmp     back1
 hexTo32BitConvert2:
-        or ebx,11111111111111110000000000000000b
-        jmp xd2
+        or      ebx,11111111111111110000000000000000b
+        jmp     back2
+
 dodaj:
-        cmp eax,1000000000000000b
-        jnb  hexTo32BitConvert
-xd:
-        mov bx, an
-        cmp ebx,1000000000000000b
-        jnb  hexTo32BitConvert2
-xd2:
-        add eax,ebx
+        cmp     eax,1000000000000000b
+        jnb     hexTo32BitConvert
+back1:
+        mov     bx, an                              ;wczytanie przekonwertowanej liczby z pamieci
+        cmp     ebx,1000000000000000b
+        jnb     hexTo32BitConvert2
+back2:
+        add     eax,ebx                             ;dodawanie
 convertoToAsciiDecision:
-        xor ebx, ebx  ; czyścimy ebx
-        mov  si,OFFSET napis 
-        cmp eax,100000000000000000b
-        jb convertToAsciiPrestart
+        mov     si,OFFSET napis                     ;ustawienie wskaznika na poczatek napisu wynikowego
+        cmp     eax,100000000000000000b             ;sprawdzamy czy suma jest ujemna
+        jb      convertToAsciiPrestart              ;jezeli nie to pomijamy nastepna czesc
 convertToAsciiIfNegative:
-        xor ebx,ebx
-        mov ebx,eax
+        mov     ebx,eax             
+        mov     dx , '-'                            ;wypisanie '-' dla liczb ujemnych
+        mov     ah,02h
+        int     21h
 
-        mov dx , '-' ; wypisanie '-' dla liczb ujemnych
-        mov ah,02h
-        int 21h
-        mov eax,ebx
-        inc si      
-        ;rozkład eax
-        xor ebx,ebx
-        mov ebx,eax
-        and ebx,00000000000000001111111111111111b ; wartość eax bez 17 bitu
-        xor eax,eax
-        mov eax, 10000h ; wartośc 17 bitu do której będziemy dodawać wartości kolejnych bitów
-        sub eax,ebx
+        mov     eax,ebx                                     
+        dec     eax                             ;zmiana liczby ujemnej w kodzie u2 na wartosc bezwzgledna
+        not     eax
 convertToAsciiPrestart:
-        ;dla dodatnich działa trzeba jeszcze zrobić rozkład dla ujemnych
-        xor ebx,ebx
-        xor ecx,ecx
-        mov ecx, 10 ; tu jest 10 bo będziem dzielić przez 10 (naprawdę)
+        mov     ecx, 10                         ;ecx = 10 , zeby pozniej dzielic
 convertToAsciiLoop:
-        xor edx, edx  ; czyścimy edx
-        div ecx
-        xor ebx, ebx
-        mov ebx,eax ; czyścimy ebx i zapisujemy tam eax
-        xor eax, eax
-        mov eax,edx ; przenosimy resztę z dzielnie do eax żeby dodać 48
-        ;add eax,48d; w eax mamy kod asci danej cyfry
-        add eax,'0'
-        ;zapisać cyfrę 
-        mov [si],ax ; chyba ax wystarczy bo to pojedyńcza cyfra a nie jakies tam araraty
-        inc si
-        xor eax, eax
-        mov eax,ebx ; przywracamy konwertowaną liczbę do eax
-
-        cmp eax,0d
-        JNE convertToAsciiLoop
+        xor     edx, edx                        ; czyścimy edx zeby zapisac tam reszte z dzielenia
+        div     ecx                             ;eax=eax/10
+        add     edx,'0'                         ;zmiana z inta na asci
+        mov     [si],dx                         ;zapis cyfry do tablicy
+        inc     si  
+        cmp     eax,0d                          ;jezeli eax==0 to koniec petli
+        JNE     convertToAsciiLoop
 print:
-                mov  ah, 02h ;wypisanie stringa napis od końca
-                mov dx,[si]
-                int     21h
-                dec si
-                cmp si,OFFSET napis
-                jnb print
+        mov     ah, 02h                         ;si jest na koncu tablicy wiec dekrementujemy w petli i wypisujemy kazdy znak
+        mov     dx,[si]
+        int     21h
+        dec     si
+        cmp     si,OFFSET napis
+        jnb     print
 Koniec:        
-                mov     ax, 4C00h               ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
-                int     21h                     ;przerwanie systemowe konczace program
+        mov     ax, 4C00h                       ;4C mowi systemowi ze konczy dzialanie programu i zwraca wartosc ah jako kod bledu 00 w tym przypadku
+        int     21h                             ;przerwanie systemowe konczace program
 
-wynik           DD     0h
-a               DB      "8000" 
-b               DB      "4000"
-an              DW      0
+
+a               DB      "-8000"                  ;input 1
+b               DB      "4000"                  ;input 2
+an              DW      0                        ;zmienna 
 znak            DB      0
-napisStart      DB     0
-napis db 16 dup (0)
+
+napis           db      16 dup (0)
 
 Kod             ENDS
 
-                END     start
+                END     Start
