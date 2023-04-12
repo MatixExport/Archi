@@ -18,49 +18,38 @@ Kod             SEGMENT USE16
                 ORG       100h
                 ASSUME    CS:Kod, DS:Kod, SS:Kod
 Start:
+        mov     si,OFFSET a                     ;zaczynamy na pierwszej liczbie z a
+        cmp     byte ptr [si] , '-'             ;sprawdzamy czy ujemna
+        je      minus1                          ;wywolujemy kod ujemnej
 
-
-startt:
-        ;xor eax,eax
-        ;xor ebx,ebx
-        ;mov ebx,10
-        ;mov eax,6
-        ;div ebx
-        ;tutaj to działa dzieli przez 10 a tam w konwersji na asci
-        ;jakieś rzeczy się dzieją niestworzone
-
-        mov     si,OFFSET a   
-        cmp     byte ptr [si] , '-'      
-        je      minus1
-
-looop:  cmp     si,OFFSET b
-        je      next
-        mov     bx,10
-        mul     bx
-        mov     bl,[si]
-        sub     bl , 48
-        add     ax,bx
-        inc     si
+looop:  cmp     si,OFFSET b                     ;sprawdzamy czy to koniec liczby
+        je      next                            ;jezeli koniec idziemy do nastepnej
+        mov     cx,10                           ;10 do cx zeby mnozyc 
+        mul     cx
+        mov     bl,[si]                         ;pobieranie nastepnego znaku
+        sub     bl , 48                         ;zmiana znaku z asci na int
+        add     ax,bx                           ;dodajemy znak do obliczanej liczby
+        inc     si                              
         jmp     looop
 minus1:
-        mov     znak,1
+        mov     znak,1                          ;zapisujemy ze liczba jest ujemna
         inc     si
-        jmp     looop
+        jmp     looop                           ;powrot
 
 next:
-        cmp     znak,1
+        cmp     znak,1                          ;jezeli ujemna
         je      ujemna
         jne     nexxt
-ujemna: 
-        not     ax
-        inc     ax
-        jmp     nexxt
+ujemna:                 
+        not     ax                              ;negacja ax
+        inc     ax                              ;+1 do ax
+        jmp     nexxt                           ;liczba juz zmieniona do kodu u2
 
 nexxt:
-        cmp     an,0          ;obie liczby powinny być zmienione
+        cmp     an,0          ;sprawdzamy czy obie liczby sa zmienione
         jne     dodaj
-        mov     an, ax        ; w an 11h = 17d czyli działa tlumaczenie stringa a na inta  
-        mov     ax, 0
+        mov     an, ax        ; wynik pierwszej liczby do an  
+        mov     ax, 0         ;poczatek konwersji drugiej liczby
         mov     znak,0
 
         mov     si,OFFSET b   
@@ -164,7 +153,7 @@ Koniec:
 
 wynik           DD     0h
 a               DB      "8000" 
-b               DB      "-8000"
+b               DB      "4000"
 an              DW      0
 znak            DB      0
 napisStart      DB     0
