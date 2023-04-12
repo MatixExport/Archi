@@ -35,11 +35,11 @@ startt:
 
 looop:  cmp     si,OFFSET b
         je      next
-        mov     bl,10
-        mul     bl
+        mov     bx,10
+        mul     bx
         mov     bl,[si]
         sub     bl , 48
-        add     al,bl
+        add     ax,bx
         inc     si
         jmp     looop
 minus1:
@@ -69,11 +69,11 @@ nexxt:
 looop2:
         cmp     si,OFFSET an
         je      next
-        mov     bl,10
-        mul     bl
+        mov     bx,10
+        mul     bx
         mov     bl,[si]
         sub     bl , 48
-        add     al,bl
+        add     ax,bx
         inc     si
         jmp     looop2
 minus2:
@@ -83,9 +83,11 @@ minus2:
 ;koniec zamiany liczb
 
 dodaj:
+
         mov bx, an
+        
         add eax,ebx
-        ;xor eax,10000000000000000b
+        xor eax,10000000000000000b
         mov wynik,eax ; TODO: przetestować dla dużych liczb
         ;dobra z jakiegoś powodu wychodzi dobrze tylko że
         ;trzeba dać not na 17 bit i wtedy wszystko śmiga lata super jest
@@ -145,8 +147,8 @@ Koniec:
                 int     21h                     ;przerwanie systemowe konczace program
 
 wynik           DD     0h
-a               DB       "-725" 
-b               DB      "-500"
+a               DB       "-32768" 
+b               DB      "32767"
 an              DW      0
 znak            DB      0
 napis db 16 dup (0)
