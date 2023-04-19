@@ -19,7 +19,7 @@ Kod             SEGMENT USE16
         ASSUME    CS:Kod, DS:Kod, SS:Kod
 Start:
         mov     si,OFFSET a                     ;zaczynamy na pierwszej liczbie z a
-        cmp     byte ptr [si] , '-'             ;sprawdzamy czy ujemna
+        cmp     byte ptr [si] , '-'             ;sprawdzamy czy ujemna ; byte ptr zeby porównać 8 bitów nie 16
         je      minus1                          ;wywolujemy kod ujemnej
 
 looop:  cmp     si,OFFSET b                     ;sprawdzamy czy to koniec liczby
@@ -40,14 +40,15 @@ next:
         cmp     znak,1                          ;jezeli ujemna
         je      ujemna
         jne     nexxt
-ujemna:                 
+ujemna:          
         not     ax                              ;negacja ax
         inc     ax                              ;+1 do ax
         jmp     nexxt                           ;liczba juz zmieniona do kodu u2
 
 nexxt:
-        cmp     an,0                            ;sprawdzamy czy obie liczby sa zmienione
+        cmp     flaga,0                            ;sprawdzamy czy obie liczby sa zmienione
         jne     dodaj                   ;przejscie do czesci dodajacej
+        mov     flaga,1
         mov     an, ax                          ; wynik pierwszej liczby do an  
         mov     ax, 0                           ;poczatek konwersji drugiej liczby
         mov     znak,0
@@ -88,7 +89,7 @@ back2:
         add     eax,ebx                             ;dodawanie
 convertoToAsciiDecision:
         mov     si,OFFSET napis                     ;ustawienie wskaznika na poczatek napisu wynikowego
-        cmp     eax,100000000000000000b             ;sprawdzamy czy suma jest ujemna
+        cmp     eax,100000000000000000b             ;sprawdzamy czy suma jest ujemna 18 bit sprawdzamy
         jb      convertToAsciiPrestart              ;jezeli nie to pomijamy nastepna czesc
 convertToAsciiIfNegative:
         mov     ebx,eax             
@@ -121,10 +122,11 @@ Koniec:
         int     21h                             ;przerwanie systemowe konczace program
 
 
-a               DB      "32767"                  ;input 1
-b               DB      "32767"                  ;input 2
+a               DB      "-32768"                  ;input 1
+b               DB      "-32767"                  ;input 2
 an              DW      0                        ;zmienna 
 znak            DB      0                        ;flaga czy liczba jest ujemna
+flaga           DB      0                        ;flaga zapisu liczby
 
 napis           db      16 dup (0)
 
