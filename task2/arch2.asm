@@ -1,6 +1,6 @@
 ;=============================================================================;
 ;                                                                             ;
-; Plik           : arch2.asm                                               ;
+; Plik           : arch2.asm                                                  ;
 ; Format         : COM                                                        ;
 ; Cwiczenie      : Kompilacja, konsolidacja i debugowanie program�w          ;
 ;                  asemblerowych                                              ;
