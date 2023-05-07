@@ -14,16 +14,11 @@ srednia: 	push 	bp
                 
                 fld     DWORD PTR [bp]
                 dec     si
-looop:                                      ;teoretycznie powinno czytać wszystkie liczby z tablicy float i oddać ich sumę ale nie działa
+looop:                                      ;Mamy sume tablicy float
                 cmp     si,0
                 je      end    
 
-                sub     ax,si
-                mov     bx,4h
-                mul     bx
-
-                add     ax,bp
-                mov     bp,ax
+                add     bp,4h
 
                 fld     DWORD PTR [bp]
                 fadd
