@@ -8,25 +8,28 @@ srednia: 	push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
 				mov     si,ax
-                mov  	ax, [bp + 6]        ;pointer na tablice
-                mov     bp,ax
-                mov     ax,si
+                mov  	ax, [bp + 6]        ;wskaznik na tablice
+                mov     bp,ax               ;przypisanie wskaznika na tablic
                 
-                fld     DWORD PTR [bp]
+                fld     DWORD PTR [bp]      ;pierwszy element z tablicy
                 dec     si
-looop:                                      ;Mamy sume tablicy float
-                cmp     si,0
+looop:                                      
+                cmp     si,0                ;warunek konca tablicy
                 je      end    
 
-                add     bp,4h
+                add     bp,4h               ;wskaznik na kolejny element tablicy
 
-                fld     DWORD PTR [bp]
-                fadd
+                fld     DWORD PTR [bp]      ;pobieranie kolejnego elementu tablicy
+                fadd                        ;dodawanie
 
-                dec     si
+                dec     si                  
                 jmp     looop                
 				
 end:
+                mov  	bp, sp
+				mov  	ax, [bp + 4]        ;rozmiar
+
+                ;fld/ax
                 
                 ;dzielenie
 				pop  	bp

@@ -7,14 +7,36 @@ extern "C" float add_mul_float (float a, float b, float c);
 
 void main()
 {
- clrscr();
- float *b = (float *)calloc(4,sizeof(float));
- b[0] = 30.5f;
- b[1] = 20.2f;
- b[2] = 10.0f;
- b[3] = 5.0f;
+    int tryb;
+    int rozmiar;
+    float * tab;
+    while (1){
+        clrscr();
 
-  cout << "Funkcja assemblerowa srednia       zwrocila wartosc " << srednia   (4,b) << endl;
- cout << "Funkcja assemblerowa add_mul_float zwrocila wartosc " << add_mul_float (1, 2, 3.5) << endl;
- getch();
+        cout<<"Wybierz 0 zeby liczyc srednia tablicy lub 1 zeby zliczac wystapienia liter w tablicy: ";
+        cin>>tryb;
+        clrscr();
+        if(tryb == 0){
+            cout<<"Podaj rozmiar tablicy liczb rzeczywistych: ";
+            cin>>rozmiar;
+            tab = (float *)calloc(rozmiar,sizeof(float));
+
+            for(int i = 0; i<rozmiar; i++){
+                cout<<"Podaj kolejny element tablicy: ";
+                cin>>tab[i];
+            }
+
+
+            cout << "Funkcja assemblerowa srednia (suma) zwrocila wartosc " << srednia   (rozmiar,tab) << endl;
+        }
+        else{
+            //here ju du jor dżob
+            cout << "Funkcja assemblerowa add_mul_float  zwrocila wartosc " << add_mul_float (1, 2, 3.5) << endl;
+
+        }
+         getch();
+    }
+    
+    
+
 }
