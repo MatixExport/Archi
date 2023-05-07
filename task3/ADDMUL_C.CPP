@@ -1,8 +1,14 @@
 #include <iostream.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <stdio.h>
+//#include <cstddef>
+#include <stddef.h>
+//#include <unistd.h>
+#include <string.h>
 
 extern "C" float   srednia   (int   rozmiar, float *  tablica);
+extern "C" int  countAsciiOccurrence(char ascii, char str[]);
 extern "C" float add_mul_float (float a, float b, float c);
 
 void main()
@@ -10,15 +16,19 @@ void main()
     int tryb;
     int rozmiar;
     float * tab;
+    char searchedAscii;
+    char charTab[255] = "";
+   
     while (1){
         clrscr();
 
-        cout<<"Wybierz 0 zeby liczyc srednia tablicy lub 1 zeby zliczac wystapienia liter w tablicy: ";
+        cout<<"Wybierz 0 zeby liczyc srednia tablicy lub 1 zeby zliczac wystapienia liter w tablicy znakow: ";
         cin>>tryb;
         clrscr();
         if(tryb == 0){
             cout<<"Podaj rozmiar tablicy liczb rzeczywistych: ";
             cin>>rozmiar;
+            
             tab = (float *)calloc(rozmiar,sizeof(float));
 
             for(int i = 0; i<rozmiar; i++){
@@ -31,6 +41,15 @@ void main()
         }
         else{
             //here ju du jor dżob
+            //ma sie rozumieć szefie
+            cout<<"Wprowadz lanuch znakow: ";
+            cin.ignore();
+            cin.getline(charTab,254);
+            cout << "\n podaj szukany znak";
+            //scanf("%c", searchedAscii);
+            cin >> searchedAscii;
+            cout << "Ilosc wystapien danego znaku: " << countAsciiOccurrence(searchedAscii,charTab) << "\n";
+            //co pan tam tak muluje szefie
             cout << "Funkcja assemblerowa add_mul_float  zwrocila wartosc " << add_mul_float (1, 2, 3.5) << endl;
 
         }

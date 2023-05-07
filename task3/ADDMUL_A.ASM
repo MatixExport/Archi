@@ -1,6 +1,7 @@
 			   .MODEL 	SMALL, C
 				PUBLIC 	srednia 
 	            PUBLIC 	add_mul_float
+                PUBLIC  countAsciiOccurrence
                
                .CODE
                
@@ -35,9 +36,34 @@ end:
 				pop  	bp
 				ret
 
+ascii = word ptr -4
+countAsciiOccurrence:
+                push bp ; zachowujemy obecną wartość bp na stosie
+                mov  bp,sp ; bp i sp będą wskazywać na początek stosu
+                mov  ax, [bp + 4]  ;przenosimy do ax szukany znak ascii
+                mov [bp + ascii],ax
+                mov  ax, [bp + 6]  ; przenosimy do ax wskaźnik na tablicę znaków
+                mov si,ax
+                xor bx,bx
+                
+countAsciiOccurrenceLoop:
+                cmp [si], 0
+                je countAsciiOccurrenceEnd
+                mov dh,byte ptr [bp + ascii]
+                cmp byte ptr [si],dh
+                jne countAsciiOccurrenceLoopIncrement
+                inc bx
+                jmp countAsciiOccurrenceLoopIncrement
+                
+countAsciiOccurrenceLoopIncrement:
+                inc si
+                jmp countAsciiOccurrenceLoop
+countAsciiOccurrenceEnd:
+                mov ax,bx
+                pop bp
+                ret
 
-
-
+                    
 
 add_mul_float: 	push 	bp
                 mov  	bp, sp
