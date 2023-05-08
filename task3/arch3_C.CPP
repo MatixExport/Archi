@@ -9,7 +9,6 @@
 
 extern "C" float   srednia   (int   rozmiar, float *  tablica);
 extern "C" int  countAsciiOccurrence(char ascii, char str[]);
-extern "C" float add_mul_float (float a, float b, float c);
 
 void main()
 {
@@ -39,7 +38,7 @@ void main()
 
             cout << "Funkcja assemblerowa srednia (suma) zwrocila wartosc " << srednia   (rozmiar,tab) << endl;
         }
-        else{
+        else if (tryb==1){
             //here ju du jor dżob
             //ma sie rozumieć szefie
             cout<<"Wprowadz lanuch znakow: ";
@@ -49,9 +48,9 @@ void main()
             //scanf("%c", searchedAscii);
             cin >> searchedAscii;
             cout << "Ilosc wystapien danego znaku: " << countAsciiOccurrence(searchedAscii,charTab) << "\n";
-            //co pan tam tak muluje szefie
-            cout << "Funkcja assemblerowa add_mul_float  zwrocila wartosc " << add_mul_float (1, 2, 3.5) << endl;
-
+        }
+        else{
+            return;
         }
          getch();
     }

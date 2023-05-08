@@ -1,10 +1,10 @@
 			   .MODEL 	SMALL, C
 				PUBLIC 	srednia 
-	            PUBLIC 	add_mul_float
                 PUBLIC  countAsciiOccurrence
                
                .CODE
-               
+
+ilosc = WORD ptr 0               
 srednia: 	push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
@@ -28,8 +28,10 @@ looop:
 				
 end:
                 mov  	bp, sp
-				mov  	ax, [bp + 4]        ;rozmiar
 
+                
+                fld    [bp + 4]
+                
                 ;fld/ax
                 
                 ;dzielenie
@@ -65,14 +67,6 @@ countAsciiOccurrenceEnd:
 
                     
 
-add_mul_float: 	push 	bp
-                mov  	bp, sp
-                fld     DWORD PTR [bp + 4]
-                fld     DWORD PTR [bp + 8]
-                fadd
-                fld     DWORD PTR [bp + 12]
-                fmul
-                pop  	bp
-				ret
+
 
                 END
