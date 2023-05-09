@@ -4,7 +4,7 @@
                
                .CODE
 
-ilosc = WORD ptr 0               
+ilosc = WORD ptr 0           
 srednia: 	push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
@@ -29,9 +29,7 @@ looop:
 end:
                 mov  	bp, sp
 
-                fld WORD ptr [bp + 4]
-                fdiv
-                ;fld/ax
+                fidiv WORD ptr [bp + 4]
                 
                 ;dzielenie
 				pop  	bp
