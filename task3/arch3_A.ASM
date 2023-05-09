@@ -29,9 +29,8 @@ looop:
 end:
                 mov  	bp, sp
 
-                fidiv WORD ptr [bp + 4]
+                fidiv WORD ptr [bp + 4]     ;dzielenie przez rozmiar
                 
-                ;dzielenie
 				pop  	bp
 				ret
 
@@ -46,7 +45,7 @@ countAsciiOccurrence:
                 xor bx,bx
                 
 countAsciiOccurrenceLoop:
-                cmp [si], 0
+                cmp word ptr [si], 0
                 je countAsciiOccurrenceEnd
                 mov dh,byte ptr [bp + ascii]
                 cmp byte ptr [si],dh

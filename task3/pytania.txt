@@ -1,0 +1,5 @@
+zmienne lokalne?    ramka stosu? //6 z instrukcji
+
+procedura?
+
+c++ czy może być
