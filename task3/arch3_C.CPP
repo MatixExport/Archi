@@ -39,8 +39,6 @@ void main()
             cout << "Funkcja assemblerowa srednia (suma) zwrocila wartosc " << srednia   (rozmiar,tab) << endl;
         }
         else if (tryb==1){
-            //here ju du jor dżob
-            //ma sie rozumieć szefie
             cout<<"Wprowadz lanuch znakow: ";
             cin.ignore();
             cin.getline(charTab,254);

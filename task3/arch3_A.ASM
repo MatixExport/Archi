@@ -29,9 +29,8 @@ looop:
 end:
                 mov  	bp, sp
 
-                
-                fld    [bp + 4]
-                
+                fld WORD ptr [bp + 4]
+                fdiv
                 ;fld/ax
                 
                 ;dzielenie
