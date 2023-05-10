@@ -2,10 +2,8 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <cstddef>
 #include <stddef.h>
-//#include <unistd.h>
-#include <string.h>
+
 
 extern "C" float   srednia   (int   rozmiar, float *  tablica);
 extern "C" int  countAsciiOccurrence(char ascii, char str[]);

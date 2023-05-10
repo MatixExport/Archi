@@ -4,12 +4,14 @@
                
                .CODE
 
-ilosc = WORD ptr 0           
 srednia: 	push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
+                sub     sp ,2 
+                mov     [bp - 2], ax
 				mov     si,ax
                 mov  	ax, [bp + 6]        ;wskaznik na tablice
+                mov     dx,bp
                 mov     bp,ax               ;przypisanie wskaznika na tablic
                 
                 fld     DWORD PTR [bp]      ;pierwszy element z tablicy
@@ -27,9 +29,11 @@ looop:
                 jmp     looop                
 				
 end:
-                mov  	bp, sp
+                mov     bp,dx
+                ;mov  	bp, sp
 
-                fidiv WORD ptr [bp + 4]     ;dzielenie przez rozmiar
+                fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar
+                mov     sp,bp
                 
 				pop  	bp
 				ret
