@@ -7,7 +7,6 @@
 
 extern "C" float   srednia   (int   rozmiar, float *  tablica);
 extern "C" int  countAsciiOccurrence(char ascii, char str[]);
-
 void main()
 {
     int tryb;
