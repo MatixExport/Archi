@@ -7,7 +7,7 @@
 srednia: 	push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
-                sub     sp ,2               ;rezerwacja miejsca na zmienna lokalna
+                sub     sp ,2               ;rezerwacja 2 bajtow na zmienna lokalna
                 mov     [bp - 2], ax        ;przenoszenie rozmiaru do zmiennej lokalnej
 				mov     si,ax               ;rozmiar do si potrzebne do petli
                 mov  	ax, [bp + 6]        ;wskaznik na tablice
@@ -39,21 +39,21 @@ end:
 
 ascii = word ptr -2
 countAsciiOccurrence:
-                push bp ; zachowujemy obecną wartość bp na stosie
-                mov  bp,sp ; bp i sp będą wskazywać na początek stosu
-                sub sp,2  ; rezerwujemy 2 bajty na zmienne lokalne
+                push bp             ; zachowujemy obecną wartość bp na stosie
+                mov  bp,sp          ; bp i sp będą wskazywać na początek stosu
+                sub sp,2            ; rezerwujemy 2 bajty na zmienne lokalne
                 mov [bp + ascii],ax
-                mov  ax, [bp + 4]  ;przenosimy do ax szukany znak ascii
+                mov  ax, [bp + 4]   ;przenosimy do ax szukany znak ascii
                 mov [bp + ascii],ax
-                mov  ax, [bp + 6]  ; przenosimy do ax wskaźnik na tablicę znaków
+                mov  ax, [bp + 6]   ; przenosimy do ax wskaźnik na tablicę znaków
                 mov si,ax           ; przenosimy do si wskaźnik na tablicę znaków
-                xor bx,bx          ; czyścimy bx
+                xor bx,bx           ; czyścimy bx
                 
 countAsciiOccurrenceLoop:
-                cmp word ptr [si], 0  ; sprawdzamy czy to koniec tablicy znaków
-                je countAsciiOccurrenceEnd ;jeżeli to koniec tablicy przejdź do countAsciiOccurrenceEnd
-                mov dh,byte ptr [bp + ascii]  ;przenosimy do dh szukany znak z zminnej lokalnej
-                cmp byte ptr [si],dh          ; sprawdzamy czy obecnie iterowany znak jest szukanym znakiem
+                cmp word ptr [si], 0                    ; sprawdzamy czy to koniec tablicy znaków
+                je countAsciiOccurrenceEnd              ;jeżeli to koniec tablicy przejdź do countAsciiOccurrenceEnd
+                mov dh,byte ptr [bp + ascii]            ;przenosimy do dh szukany znak z zminnej lokalnej
+                cmp byte ptr [si],dh                    ; sprawdzamy czy obecnie iterowany znak jest szukanym znakiem
                 jne countAsciiOccurrenceLoopIncrement   ;jeżeli nie to przechodzimy do inkrementacji
                 inc bx                                  ;jeżeli tak to zwiększamy bx o 1 
                 jmp countAsciiOccurrenceLoopIncrement   ;i przechodzimy do inkrementacji
