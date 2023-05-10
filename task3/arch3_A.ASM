@@ -7,11 +7,11 @@
 srednia: 	push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
-                sub     sp ,2 
-                mov     [bp - 2], ax
-				mov     si,ax
+                sub     sp ,2               ;rezerwacja miejsca na zmienna lokalna
+                mov     [bp - 2], ax        ;przenoszenie rozmiaru do zmiennej lokalnej
+				mov     si,ax               ;rozmiar do si potrzebne do petli
                 mov  	ax, [bp + 6]        ;wskaznik na tablice
-                mov     dx,bp
+                mov     dx,bp               ;zapisanie wierzcholka stosu 
                 mov     bp,ax               ;przypisanie wskaznika na tablic
                 
                 fld     DWORD PTR [bp]      ;pierwszy element z tablicy
@@ -29,11 +29,10 @@ looop:
                 jmp     looop                
 				
 end:
-                mov     bp,dx
-                ;mov  	bp, sp
+                mov     bp,dx               ;przywrocenie stosu
 
                 fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar
-                mov     sp,bp
+                mov     sp,bp               ;zwolnienie pamieci zmiennych lokalnych
                 
 				pop  	bp
 				ret
