@@ -38,6 +38,9 @@ ascii = word ptr -4
 countAsciiOccurrence:
                 push bp ; zachowujemy obecną wartość bp na stosie
                 mov  bp,sp ; bp i sp będą wskazywać na początek stosu
+                sub sp,4
+                xor ax,ax
+                mov [bp + ascii],ax
                 mov  ax, [bp + 4]  ;przenosimy do ax szukany znak ascii
                 mov [bp + ascii],ax
                 mov  ax, [bp + 6]  ; przenosimy do ax wskaźnik na tablicę znaków
@@ -57,12 +60,10 @@ countAsciiOccurrenceLoopIncrement:
                 inc si
                 jmp countAsciiOccurrenceLoop
 countAsciiOccurrenceEnd:
+                mov sp,bp
                 mov ax,bx
                 pop bp
                 ret
 
-                    
-
-
-
+                
                 END
