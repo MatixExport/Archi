@@ -21,7 +21,9 @@ void main()
     while (1){
         clrscr();
 
-        cout<<"Wybierz 0 zeby liczyc srednia tablicy lub 1 zeby zliczac wystapienia liter w tablicy znakow: ";
+        cout<<"Wybierz:\n\
+        0 zeby liczyc srednia tablicy\n\
+        1 zeby zliczac wystapienia liter w tablicy znakow: ";
         cin>>tryb;
         clrscr();
         if(tryb == 0){
@@ -36,13 +38,13 @@ void main()
             }
 
 
-            cout << "Funkcja assemblerowa srednia (suma) zwrocila wartosc " << srednia   (rozmiar,tab) << endl;
+            cout << "Funkcja assemblerowa srednia zwrocila wartosc " << srednia   (rozmiar,tab) << endl;
         }
         else if (tryb==1){
             cout<<"Wprowadz lanuch znakow: ";
             cin.ignore();
             cin.getline(charTab,254);
-            cout << "\n podaj szukany znak";
+            cout << "\n podaj szukany znak: ";
             //scanf("%c", searchedAscii);
             cin >> searchedAscii;
             cout << "Ilosc wystapien danego znaku: " << countAsciiOccurrence(searchedAscii,charTab) << "\n";
