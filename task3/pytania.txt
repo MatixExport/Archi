@@ -1,3 +1,0 @@
-zmienne lokalne?    ramka stosu? //6 z instrukcji
-
-jakie registry na stos trzeba wepchnąć skoro działa jak jest

@@ -1,9 +1,6 @@
-#include <iostream.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stddef.h>
-
+#include <iostream.h>           //cin cout
+#include <conio.h>              //clrscr i getch
+#include <stdlib.h>             //calloc
 
 extern "C" float   srednia   (int   rozmiar, float *  tablica);
 extern "C" int  countAsciiOccurrence(char ascii, char str[]);
@@ -35,7 +32,7 @@ void main()
             }
 
 
-            cout << "Funkcja assemblerowa srednia zwrocila wartosc " << srednia   (rozmiar,tab) << endl;
+            cout << "Funkcja assemblerowa srednia zwrocila wartosc " << srednia(rozmiar,tab) << endl;
         }
         else if (tryb==1){
             cout<<"Wprowadz lanuch znakow: ";
