@@ -4,7 +4,7 @@
                
                .CODE
 
-srednia: 	push 	bp
+srednia:    push 	bp
 				mov  	bp, sp
 				mov  	ax, [bp + 4]        ;rozmiar
                 sub     sp ,2               ;rezerwacja 2 bajtow na zmienna lokalna
@@ -31,7 +31,7 @@ looop:
 end:
                 mov     bp,dx               ;przywrocenie stosu
 
-                fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar
+                fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar (zmienna lokalna)
                 mov     sp,bp               ;zwolnienie pamieci zmiennych lokalnych
                 
 				pop  	bp
