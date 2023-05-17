@@ -4,13 +4,17 @@
                
                .CODE
 
-srednia: 	push 	bp
+srednia:    push 	bp
+            push    ax
+            push    si
+            push    dx
+;trzeba inne rejestry które są zmieniane
 				mov  	bp, sp
-				mov  	ax, [bp + 4]        ;rozmiar
+				mov  	ax, [bp + 10]        ;rozmiar
                 sub     sp ,2               ;rezerwacja 2 bajtow na zmienna lokalna
                 mov     [bp - 2], ax        ;przenoszenie rozmiaru do zmiennej lokalnej
 				mov     si,ax               ;rozmiar do si potrzebne do petli
-                mov  	ax, [bp + 6]        ;wskaznik na tablice
+                mov  	ax, [bp + 12]        ;wskaznik na tablice
                 mov     dx,bp               ;zapisanie wierzcholka stosu 
                 mov     bp,ax               ;przypisanie wskaznika na tablic
                 
@@ -31,9 +35,12 @@ looop:
 end:
                 mov     bp,dx               ;przywrocenie stosu
 
-                fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar
+                fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar (zmienna lokalna)
                 mov     sp,bp               ;zwolnienie pamieci zmiennych lokalnych
                 
+                pop     dx
+                pop     si
+                pop     ax
 				pop  	bp
 				ret
 ;zachowanie i przywrócenie bx,si podobnie jak bp
