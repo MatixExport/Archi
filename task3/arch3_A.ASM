@@ -36,16 +36,17 @@ end:
                 
 				pop  	bp
 				ret
-
+;zachowanie i przywrócenie bx,si podobnie jak bp
 ascii = word ptr -2
 countAsciiOccurrence:
+                push si
+                push bx
                 push bp             ; zachowujemy obecną wartość bp na stosie
                 mov  bp,sp          ; bp i sp będą wskazywać na początek stosu
                 sub sp,2            ; rezerwujemy 2 bajty na zmienne lokalne
+                mov  ax, [bp + 8]   ;przenosimy do ax szukany znak ascii
                 mov [bp + ascii],ax
-                mov  ax, [bp + 4]   ;przenosimy do ax szukany znak ascii
-                mov [bp + ascii],ax
-                mov  ax, [bp + 6]   ; przenosimy do ax wskaźnik na tablicę znaków
+                mov  ax, [bp + 10]   ; przenosimy do ax wskaźnik na tablicę znaków
                 mov si,ax           ; przenosimy do si wskaźnik na tablicę znaków
                 xor bx,bx           ; czyścimy bx
                 
@@ -63,7 +64,9 @@ countAsciiOccurrenceLoopIncrement:
                 jmp countAsciiOccurrenceLoop             ; przechodzimy do pętli
 countAsciiOccurrenceEnd:
                 mov sp,bp                                ; zdjęcie ze stosu zmiennych lokalnych
-                mov ax,bx                                ; przenosimy ilość wystąpień szukanego znaku do ax
+                mov ax,bx         
+                pop si    
+                pop bx                   ; przenosimy ilość wystąpień szukanego znaku do ax
                 pop bp                                   ; odtworzenie starej wartości bp
                 ret                                      ; powrót z procedury
 
