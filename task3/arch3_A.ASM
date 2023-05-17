@@ -5,12 +5,16 @@
                .CODE
 
 srednia:    push 	bp
+            push    ax
+            push    si
+            push    dx
+;trzeba inne rejestry które są zmieniane
 				mov  	bp, sp
-				mov  	ax, [bp + 4]        ;rozmiar
+				mov  	ax, [bp + 10]        ;rozmiar
                 sub     sp ,2               ;rezerwacja 2 bajtow na zmienna lokalna
                 mov     [bp - 2], ax        ;przenoszenie rozmiaru do zmiennej lokalnej
 				mov     si,ax               ;rozmiar do si potrzebne do petli
-                mov  	ax, [bp + 6]        ;wskaznik na tablice
+                mov  	ax, [bp + 12]        ;wskaznik na tablice
                 mov     dx,bp               ;zapisanie wierzcholka stosu 
                 mov     bp,ax               ;przypisanie wskaznika na tablic
                 
@@ -34,6 +38,9 @@ end:
                 fidiv WORD ptr [bp - 2]     ;dzielenie przez rozmiar (zmienna lokalna)
                 mov     sp,bp               ;zwolnienie pamieci zmiennych lokalnych
                 
+                pop     dx
+                pop     si
+                pop     ax
 				pop  	bp
 				ret
 
@@ -42,7 +49,6 @@ countAsciiOccurrence:
                 push bp             ; zachowujemy obecną wartość bp na stosie
                 mov  bp,sp          ; bp i sp będą wskazywać na początek stosu
                 sub sp,2            ; rezerwujemy 2 bajty na zmienne lokalne
-                mov [bp + ascii],ax
                 mov  ax, [bp + 4]   ;przenosimy do ax szukany znak ascii
                 mov [bp + ascii],ax
                 mov  ax, [bp + 6]   ; przenosimy do ax wskaźnik na tablicę znaków
