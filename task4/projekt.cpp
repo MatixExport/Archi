@@ -43,45 +43,88 @@
 		 DWORD biClrImportant; //Ilość kolorów z palety niezbędnych do
 	 }; //wyświetlenia obrazu. 
 
+ struct RGBQUAD 
+ { 
+ BYTE rgbBlue; 
+ BYTE rgbGreen; 
+ BYTE rgbRed; 
+ BYTE rgbReserved; 
+ }; 
 
-	FILE *file; //Plik bitmapy
-	BITMAPFILEHEADER bmfh; //nagłówek nr 1 bitmapy
-	BITMAPINFOHEADER bmih; //nagłówek nr 2 bitmapy
+	
+
+    
+
 	unsigned char far* video_memory = (BYTE *)0xA0000000L;			//Ogolnie to musi byc far, far away, ale kto by sie tym przejmowal...
 																	//Patrz: Dalekie wskazniki
 	
 	//Uczcie i czerpcie z tego wszyscy...
 	int main(){
 
+
+        //here tryb graficzny:
 		REGPACK regs;					
 		regs.r_ax = 0x13;
 		intr(0x10, &regs);
 
-		clrscr();
+
+		//here czytanie danych o pliku:
+		FILE * file = fopen("IMAGES/BABOON.bmp", "rb");
 		
+        BITMAPFILEHEADER BM_fileHeader; //nagłówek nr 1 bitmapy
+	    BITMAPINFOHEADER BM_infoHeader; //nagłówek nr 2 bitmapy
+
+		fread(&BM_fileHeader, sizeof(BITMAPFILEHEADER), 1, file);
+		fread(&BM_infoHeader, sizeof(BITMAPINFOHEADER), 1, file); 
+		
+
+        //here ustawianie kolorków na czarno białe:
 		outportb(0x03C8, 0); 				//rozpocznij ustawianie palety od koloru nr 0
 		for (int i = 0; i < 256; i++) 		//ilość kolorów w palecie 8-bitowej
 		{
-			 outp(0x03C9, i * 63 / 255); 	//skalowana składowa R
-			 outp(0x03C9, i * 63 / 255); 	//skalowana składowa G
-			 outp(0x03C9, i * 63 / 255); 	//skalowana składowa B
+            
+			 outp(0x03C9,   i * 63 / 255); 	//skalowana składowa R
+			 outp(0x03C9,   i * 63 / 255); 	//skalowana składowa G
+			 outp(0x03C9,   i * 63 / 255); 	//skalowana składowa B
 		}
-		
-		file = fopen("IMAGES/LENA.bmp", "rb");
-		
-		fread(&bmfh, sizeof(BITMAPFILEHEADER), 1, file);
-		fread(&bmih, sizeof(BITMAPINFOHEADER), 1, file); 
-		
-		fseek(file,bmfh.bfOffBits,SEEK_SET);  				//Tego to w sumie nie dali w instrukcji, ale to ustawienie kursora na poczatek
+
+       
+        //here wyswietlanie obrazu:
+		fseek(file,BM_fileHeader.bfOffBits,SEEK_SET);  				// Od poczatku pliku przesuwa o ten offset dzieki czemu jesteśmy w miejscu gdzie zaczynaja sie konkretne piksele obrazu
 		
 		for(int k=199; k>=0; k--){											//Wczytywanie jest "od dolu", stad dekrementacja 
 			for(int j=0; j<320; j++){
 				 video_memory[320*k + j] = fgetc(file); 		//Ogolnie to dzialamy na calym obrazku jako na jednowymiarowej tablicy...
 			}																//Kazda linijka jest wczytywana co 320 znak
 		}																	//Stad to kazdego pojedynczego piksela zaczytujemy piksel obrazka
-			
 		fclose(file);
-	
+
+getch();
+
+
+
+//here zaczynaja sie robic kolorki bo mi sie nudziło
+
+		file = fopen("IMAGES/BABOON.bmp", "rb");
+		
+		fread(&BM_fileHeader, sizeof(BITMAPFILEHEADER), 1, file);
+		fread(&BM_infoHeader, sizeof(BITMAPINFOHEADER), 1, file); 
+
+        RGBQUAD paleta; //nagłówek nr 2 bitmapy
+
+        
+		
+		outportb(0x03C8, 0); 				//rozpocznij ustawianie palety od koloru nr 0
+		for (k = 0; k < 256; k++) 		//ilość kolorów w palecie 8-bitowej
+		{
+            fread(&paleta, sizeof(RGBQUAD),1,file);
+			outp(0x03C9,   (int)paleta.rgbRed * 63 / 255); 	//skalowana składowa R
+			outp(0x03C9,   (int)paleta.rgbGreen * 63 / 255); 	//skalowana składowa G
+			outp(0x03C9,   (int)paleta.rgbBlue * 63 / 255); 	//skalowana składowa B
+		}
+
+fclose(file);
+//here koniec kolorkow
 
 
 getch();
