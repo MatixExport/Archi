@@ -1,4 +1,4 @@
 CLS
-BCC -ecma projekt.cpp
+BCC -egrafika projekt.cpp
 DEL *.OBJ
 DEL *.MAP
