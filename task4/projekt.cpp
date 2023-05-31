@@ -40,7 +40,7 @@ struct RGBQUAD {
 
 
 
-int kolorFlaga = 0;          //bool 1-sa kolory 0-nie ma
+int trybCzarnoBialy = 0;          //bool 1-sa kolory 0-nie ma
 
 char fileName[10][20]={"IMAGES/AREA.bmp","IMAGES/BABOON.bmp","IMAGES/LENA.bmp","IMAGES/PEPPERS.bmp","IMAGES/PLANE.bmp","IMAGES/TANK.bmp","IMAGES/areo.BMP","IMAGES/boat.BMP","IMAGES/lenaczby.BMP","IMAGES/bridge.BMP"};
 int fileNumber;
@@ -66,9 +66,9 @@ void ustawPaleteKolorow(){            //bool nie istnieje
     outportb(0x03C8, 0); 				//rozpocznij ustawianie palety od koloru nr 0
     for (int i = 0; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
     {
-        outp(0x03C9, (kolorFlaga ? i:(int)paleta[i].rgbRed)   * 63 / 255); 	//skalowana składowa R
-        outp(0x03C9, (kolorFlaga ? i:(int)paleta[i].rgbGreen) * 63 / 255); 	//skalowana składowa G
-        outp(0x03C9, (kolorFlaga ? i:(int)paleta[i].rgbBlue)  * 63 / 255); 	//skalowana składowa B
+        outp(0x03C9, (trybCzarnoBialy ? i:(int)paleta[i].rgbRed)   * 63 / 255); 	//skalowana składowa R
+        outp(0x03C9, (trybCzarnoBialy ? i:(int)paleta[i].rgbGreen) * 63 / 255); 	//skalowana składowa G
+        outp(0x03C9, (trybCzarnoBialy ? i:(int)paleta[i].rgbBlue)  * 63 / 255); 	//skalowana składowa B
     }
     
 }
@@ -100,7 +100,7 @@ void wyswietl(){
             video_memory[320*i + j] = fgetc(file); 		
         }																
     }
-    ustawPaleteKolorow();
+    //ustawPaleteKolorow();
     fclose(file);
     getch();
     trybTekstowy();	
@@ -146,7 +146,7 @@ void progowanie(){
             }
         }																
     }	
-    ustawPaleteKolorow();
+    //ustawPaleteKolorow();
     fclose(file);
     getch();
     trybTekstowy();
@@ -163,17 +163,21 @@ void negatyw(){
     int wartosc;
     for(int i=199; i>=0; i--){											//obraz jest od tyłu
         for(int j=0; j<320; j++){
-             video_memory[320*i + j] = fgetc(file); 	
+             video_memory[320*i + j] = (!trybCzarnoBialy ? fgetc(file) : ~fgetc(file)); 	
         }																
     }	
     ///negowanie plety kolorow//
-    outportb(0x03C8, 0); 				//rozpocznij ustawianie palety od koloru nr 0
-    for (i = 0; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
-    {                               
-        outp(0x03C9, ~(kolorFlaga ? i:(int)paleta[i].rgbRed)   * 63 / 255); 	//skalowana składowa R
-        outp(0x03C9, ~(kolorFlaga ? i:(int)paleta[i].rgbGreen) * 63 / 255); 	//skalowana składowa G
-        outp(0x03C9, ~(kolorFlaga ? i:(int)paleta[i].rgbBlue)  * 63 / 255); 	//skalowana składowa B
-    }
+    outportb(0x03C8, 0); 
+					//rozpocznij ustawianie palety od koloru nr 0
+	if(!trybCzarnoBialy){
+		for (i = 0; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
+		{                               
+			outp(0x03C9, ~((int)paleta[i].rgbRed)   * 63 / 255); 	//skalowana składowa R
+			outp(0x03C9, ~((int)paleta[i].rgbGreen) * 63 / 255); 	//skalowana składowa G
+			outp(0x03C9, ~((int)paleta[i].rgbBlue)  * 63 / 255); 	//skalowana składowa B
+		}
+	}
+    
     fclose(file);
     getch();
     trybTekstowy();
@@ -203,17 +207,20 @@ int main(){
                 wyswietl();
             break;
             case 4:
-                kolorFlaga = 0;
+                trybCzarnoBialy = 0;
             break;
             case 5:
-                kolorFlaga = 1;
+                trybCzarnoBialy = 1;
+				ustawPaleteKolorow();
             break;
             case 6:
                 wybierzPlik();
+				ustawPaleteKolorow();
             break;
-            case 7:
-                //exit
-            break;
+			default:
+				opcja = 7;
+			break;
+
         }
     }
 return 0;
