@@ -42,7 +42,7 @@ struct RGBQUAD {
 
 int kolorFlaga = 0;          //bool 1-sa kolory 0-nie ma
 
-char fileName[6][20]={"IMAGES/AREA.bmp","IMAGES/BABOON.bmp","IMAGES/LENA.bmp","IMAGES/PEPPERS.bmp","IMAGES/PLANE.bmp","IMAGES/TANK.bmp"};
+char fileName[10][20]={"IMAGES/AREA.bmp","IMAGES/BABOON.bmp","IMAGES/LENA.bmp","IMAGES/PEPPERS.bmp","IMAGES/PLANE.bmp","IMAGES/TANK.bmp","IMAGES/areo.BMP","IMAGES/boat.BMP","IMAGES/lenaczby.BMP","IMAGES/bridge.BMP"};
 int fileNumber;
 BITMAPFILEHEADER BM_fileHeader;
 BITMAPINFOHEADER BM_infoHeader;	
@@ -70,6 +70,7 @@ void ustawPaleteKolorow(){            //bool nie istnieje
         outp(0x03C9, (kolorFlaga ? i:(int)paleta[i].rgbGreen) * 63 / 255); 	//skalowana składowa G
         outp(0x03C9, (kolorFlaga ? i:(int)paleta[i].rgbBlue)  * 63 / 255); 	//skalowana składowa B
     }
+    
 }
 
 void clrscr(){              //nadpisanie tej funkcji bo standardowa zostawia szary ekran a nie czarny
@@ -113,7 +114,11 @@ void wybierzPlik(){
     2.LENA\n\
     3.PEPPERS\n\
     4.PLANE\n\
-    5.TANK\n";
+    5.TANK\n\
+    6.areo\n\
+    7.boat\n\
+    8.lenaczby\n\
+    9.bridge";
     cin>>fileNumber;
 }
 
