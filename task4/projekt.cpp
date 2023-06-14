@@ -38,16 +38,13 @@ struct RGBQUAD {
     BYTE rgbReserved; 
 };
 
-
-
 int trybCzarnoBialy = 0;          //bool 1-sa kolory 0-nie ma
-
 char fileName[10][20]={"IMAGES/AREA.bmp","IMAGES/BABOON.bmp","IMAGES/LENA.bmp","IMAGES/PEPPERS.bmp","IMAGES/PLANE.bmp","IMAGES/TANK.bmp","IMAGES/areo.BMP","IMAGES/boat.BMP","IMAGES/lenaczby.BMP","IMAGES/bridge.BMP"};
 int fileNumber;
 BITMAPFILEHEADER BM_fileHeader;
 BITMAPINFOHEADER BM_infoHeader;	
 RGBQUAD paleta[256] ; 
-unsigned char far* video_memory = (BYTE *)0xA0000000L;			//nie wiem dlaczego to far ale inaczej jest null pointer
+unsigned char far* video_memory = (BYTE *)0xA0000000L;			// far - jest poza segmentem czyli można do pamięci karty graficznej // 0xA000000L - pamięć ekranu dla trybu 13
 
 void ustawPaleteKolorow(){            //bool nie istnieje
     outportb(0x03C8, 0); 				//rozpocznij ustawianie palety od koloru nr 0
@@ -57,7 +54,6 @@ void ustawPaleteKolorow(){            //bool nie istnieje
         outp(0x03C9, (trybCzarnoBialy ? i:(int)paleta[i].rgbGreen) * 63 / 255); 	//skalowana składowa G
         outp(0x03C9, (trybCzarnoBialy ? i:(int)paleta[i].rgbBlue)  * 63 / 255); 	//skalowana składowa B
     }
-    
 }
 
 void trybTekstowy(){
@@ -71,9 +67,6 @@ void trybGraficzny(){
     intr(0x10, &regs);
 	ustawPaleteKolorow();
 }
-
-
-
 void clrscr(){              //nadpisanie tej funkcji bo standardowa zostawia szary ekran a nie czarny
     trybGraficzny();
         for(int i=199; i>=0; i--){											
@@ -82,6 +75,22 @@ void clrscr(){              //nadpisanie tej funkcji bo standardowa zostawia sza
         }																
     }	
     trybTekstowy();
+}
+
+void wybierzPlik(){
+    clrscr();
+    cout<<"Wybierz:\n\
+    0.AREA\n\
+    1.BABOON\n\
+    2.LENA\n\
+    3.PEPPERS\n\
+    4.PLANE\n\
+    5.TANK\n\
+    6.areo\n\
+    7.boat\n\
+    8.lenaczby\n\
+    9.bridge";
+    cin>>fileNumber;
 }
 
 void wyswietl(){
@@ -107,22 +116,6 @@ void wyswietl(){
     trybTekstowy();	
 }
 
-void wybierzPlik(){
-    clrscr();
-    cout<<"Wybierz:\n\
-    0.AREA\n\
-    1.BABOON\n\
-    2.LENA\n\
-    3.PEPPERS\n\
-    4.PLANE\n\
-    5.TANK\n\
-    6.areo\n\
-    7.boat\n\
-    8.lenaczby\n\
-    9.bridge";
-    cin>>fileNumber;
-}
-
 void progowanie(){
     cout<<"podaj prog: ";
     int prog;
@@ -134,12 +127,10 @@ void progowanie(){
     fread(&BM_infoHeader, sizeof(BITMAPINFOHEADER), 1, file); 
 
     fread(&paleta, sizeof(RGBQUAD),256,file);
-
-    int wartosc;
     for(int i=199; i>=0; i--){											//obraz jest od tyłu
         for(int j=0; j<320; j++){
             int x = (int)fgetc(file);
-            if((x>=prog)||(!trybCzarnoBialy)){
+            if((x>=prog)){
                 video_memory[320*i + j] = x;
             }
             else{
@@ -147,19 +138,7 @@ void progowanie(){
             }
         }																
     }
-    if(!trybCzarnoBialy){
-        for(i = 0; i<prog;i++ ){
-            outp(0x03C9,0); 	//skalowana składowa R
-			outp(0x03C9,0); 	//skalowana składowa G
-			outp(0x03C9,0); 	//skalowana składowa B
-        }
-         for (i = prog; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
-		{                               
-			outp(0x03C9, (int)paleta[i].rgbRed   * 63 / 255); 	//skalowana składowa R
-			outp(0x03C9, (int)paleta[i].rgbGreen * 63 / 255); 	//skalowana składowa G
-			outp(0x03C9, (int)paleta[i].rgbBlue  * 63 / 255); 	//skalowana składowa B
-		}
-    }	
+   
     //ustawPaleteKolorow();
     fclose(file);
     getch();
@@ -174,15 +153,14 @@ void negatyw(){
 
     fread(&paleta, sizeof(RGBQUAD),256,file);
 
-    int wartosc;
     for(int i=199; i>=0; i--){											//obraz jest od tyłu
         for(int j=0; j<320; j++){
              video_memory[320*i + j] = (!trybCzarnoBialy ? fgetc(file) : ~fgetc(file)); 	
         }																
     }	
+
     ///negowanie plety kolorow//
-    outportb(0x03C8, 0); 
-					//rozpocznij ustawianie palety od koloru nr 0
+    outportb(0x03C8, 0);                    //rozpocznij ustawianie palety od koloru nr 0
 	if(!trybCzarnoBialy){
 		for (i = 0; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
 		{                               
