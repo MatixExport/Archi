@@ -49,19 +49,6 @@ BITMAPINFOHEADER BM_infoHeader;
 RGBQUAD paleta[256] ; 
 unsigned char far* video_memory = (BYTE *)0xA0000000L;			//nie wiem dlaczego to far ale inaczej jest null pointer
 
-
-
-void trybTekstowy(){
-    REGPACK regs;					
-    regs.r_ax = 0x10;
-    intr(0x10, &regs);              //int 16  z rejestrami ze struktury regs
-}	
-void trybGraficzny(){
-    REGPACK regs;					
-    regs.r_ax = 0x13;
-    intr(0x10, &regs);
-}
-
 void ustawPaleteKolorow(){            //bool nie istnieje
     outportb(0x03C8, 0); 				//rozpocznij ustawianie palety od koloru nr 0
     for (int i = 0; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
@@ -72,6 +59,20 @@ void ustawPaleteKolorow(){            //bool nie istnieje
     }
     
 }
+
+void trybTekstowy(){
+    REGPACK regs;					
+    regs.r_ax = 0x10;
+    intr(0x10, &regs);              //int 16  z rejestrami ze struktury regs
+}	
+void trybGraficzny(){
+    REGPACK regs;					
+    regs.r_ax = 0x13;
+    intr(0x10, &regs);
+	ustawPaleteKolorow();
+}
+
+
 
 void clrscr(){              //nadpisanie tej funkcji bo standardowa zostawia szary ekran a nie czarny
     trybGraficzny();
@@ -100,7 +101,7 @@ void wyswietl(){
             video_memory[320*i + j] = fgetc(file); 		
         }																
     }
-    //ustawPaleteKolorow();
+    ustawPaleteKolorow();
     fclose(file);
     getch();
     trybTekstowy();	
@@ -138,13 +139,26 @@ void progowanie(){
     for(int i=199; i>=0; i--){											//obraz jest od tyłu
         for(int j=0; j<320; j++){
             int x = (int)fgetc(file);
-            if(x>=prog){
+            if((x>=prog)||(!trybCzarnoBialy)){
                 video_memory[320*i + j] = x;
             }
             else{
                 video_memory[320*i + j] = 0;
             }
         }																
+    }
+    if(!trybCzarnoBialy){
+        for(i = 0; i<prog;i++ ){
+            outp(0x03C9,0); 	//skalowana składowa R
+			outp(0x03C9,0); 	//skalowana składowa G
+			outp(0x03C9,0); 	//skalowana składowa B
+        }
+         for (i = prog; i < 256; i++) 		    //ilość kolorów w palecie 8-bitowej
+		{                               
+			outp(0x03C9, (int)paleta[i].rgbRed   * 63 / 255); 	//skalowana składowa R
+			outp(0x03C9, (int)paleta[i].rgbGreen * 63 / 255); 	//skalowana składowa G
+			outp(0x03C9, (int)paleta[i].rgbBlue  * 63 / 255); 	//skalowana składowa B
+		}
     }	
     //ustawPaleteKolorow();
     fclose(file);
@@ -211,11 +225,9 @@ int main(){
             break;
             case 5:
                 trybCzarnoBialy = 1;
-				ustawPaleteKolorow();
             break;
             case 6:
                 wybierzPlik();
-				ustawPaleteKolorow();
             break;
 			default:
 				opcja = 7;
